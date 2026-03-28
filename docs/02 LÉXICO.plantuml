@@ -1,0 +1,19 @@
+@startuml
+digraph DFA {
+  label="Diagrama de \n transiciones"
+  labelloc="t"
+  fontsize=20
+
+  node [shape=circle]
+  start [shape=point]
+
+  // estados de aceptacion
+  2 [shape=doublecircle]
+
+  // transiciones
+  start -> 0
+  0 -> 1 [label="[a-z]"]
+  1 -> 1 [label="[a-z0-9_]"]
+  1 -> 2 [label="otro"]
+}
+@enduml
