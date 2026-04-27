@@ -1,19 +1,155 @@
 @startuml
-digraph DFA {
-  label="Diagrama de \n transiciones"
-  labelloc="t"
-  fontsize=20
+!option handwritten true
 
-  node [shape=circle]
-  start [shape=point]
+title Diagrama de Transiciones
 
-  // estados de aceptacion
-  2 [shape=doublecircle]
-
-  // transiciones
-  start -> 0
-  0 -> 1 [label="[a-z]"]
-  1 -> 1 [label="[a-z0-9_]"]
-  1 -> 2 [label="otro"]
+' Configuración de estilo
+skinparam ArrowFontStyle bold
+skinparam state {
+  BackgroundColor #APPLICATION
+  BorderColor Blue
+  ArrowColor black
 }
+
+skinparam state<<accept>> {
+  BackgroundColor PaleGreen
+  BorderColor White
+  LineThickness 2
+  BorderColor DarkGreen
+}
+hide empty description
+
+' La Columna Central
+state " " as C0 <<choice>>
+state " " as C1 <<choice>>
+state " " as C2 <<choice>>
+state " " as C3 <<choice>>
+state " " as C4 <<choice>>
+state " " as C5 <<choice>>
+state " " as C6 <<choice>>
+state " " as C7 <<choice>>
+state " " as C8 <<choice>>
+
+' Ayudantes de autoreferencia
+state " " as 1R<<choice>>
+state " " as 3R<<choice>>
+
+' Finalizadores
+state end2 <<end>>
+state end4 <<end>>
+state end6 <<end>>
+state end8 <<end>>
+state end9 <<end>>
+state end49 <<end>>
+state end11 <<end>>
+state end12 <<end>>
+state end13 <<end>>
+state end14 <<end>>
+state end16 <<end>>
+state end17 <<end>>
+state end19 <<end>>
+state end24 <<end>>
+state end25 <<end>>
+state end21 <<end>>
+state end22 <<end>>
+state end27 <<end>>
+state end29 <<end>>
+state end30 <<end>>
+state end31 <<end>>
+state end32 <<end>>
+state end33 <<end>>
+state end34 <<end>>
+state end35 <<end>>
+state end37 <<end>>
+state end38 <<end>>
+
+' --- Fila 0 ---
+[*] --> 0
+0 --> C0
+
+' --- Fila 1 ---
+C0 -r> 1R
+
+1R -d-> 1 : [ a-zA-Z á ä Á Ä é ë É Ë í ï Í Ï ó ö Ó Ö ú ü Ú Ü ñ Ñ _ ]
+1 --> 1 : [ a-zA-Z á ä Á Ä é ë É Ë í ï Í Ï ó ö Ó Ö ú ü Ú Ü ñ Ñ _ ]
+1 --> 2 : <color:Tomato>otro</color>
+state 2 <<accept>> : <color:blue>IDENT</color>\n<color:blue>rollback</COLOR>
+2 -d-> end2
+
+C0 -l> 3R
+3R -d-> 3 : <size:15>"</size>
+3 -> 3 : <color:Tomato>otro</color>
+3 --> 4 : <size:15>"</size>
+state 4 <<accept>> : <color:blue>LIT_STRING</color>
+4 -d-> end4
+
+' --- Fila 2 ---
+C0 -----> C1
+
+C1 -r-> 5 : [0-9]
+5 --> 5 : [0-9]
+5 --> 6 : <color:Tomato>otro</color>
+state 6 <<accept>> : <color:blue>LIT_ENTERO</color>\n<color:blue>rollback</COLOR>
+6 -d-> end6
+
+C1 -l-> 7 : <size:15>-</size>
+7 --> 8 : <size:15>-</size>
+7 --> 9 : <color:Tomato>otro</color>
+state 8 <<accept>> : <color:blue>OP_DEC</color>
+8 -d-> end8
+state 9 <<accept>> : <color:blue>OP_REST</color>\n<color:blue>rollback</COLOR>
+9 -d-> end9
+' --- Fila 3: Operadores RESTA / DEC ---
+C1 ----> C2
+
+C2 -r-> 10 : <size:15>+</size>
+10 --> 11 : <size:15>+</size>
+10 --> 12 : <color:Tomato>otro</color>
+state 11 <<accept>> : <color:blue>OP_INC</color>
+11 -d-> end11
+state 12 <<accept>> : <color:blue>OP_SUMA</color>\n<color:blue>rollback</COLOR>
+12 -d-> end12
+
+C2 -l-> 13 : <size:15>*</size>
+state 13 <<accept>> : OP_MUL<color:blue>LIT_STRING</color>
+13 -d-> end13
+
+' --- Fila 4: Operadores SUMA / INC ---
+C2 ----> C3
+
+C3 -l-> 14 : <size:15>/</size>
+state 14 <<accept>> : <color:blue>OP_DIV</color>
+14 -d-> end14
+
+C3 -r-> 15 : <size:15>=</size>
+15 --> 16 : <size:15>=</size>
+15 --> 17 : <color:Tomato>otro</color>
+state 16 <<accept>> : <color:blue>OP_IGU</color>
+16 -d-> end16
+state 17 <<accept>> : <color:blue>OP_ASIG</color>\n<color:blue>rollback</COLOR>
+17 -d-> end17
+
+' --- Fila 5: Otros Operadores ---
+C3 ----> C4
+
+C4 -l-> 18 : <size:15>!</size>
+18 -l-> 19 : <size:15>=</size>
+state 19 <<accept>> : <color:blue>OP_DIFE</color>
+19 -d-> end19
+
+C4 -r-> 20 : <size:15>></size>
+20 --> 21 : <size:15>=</size>
+20 --> 22 : <color:Tomato>otro</color>
+state 21 <<accept>> : <color:blue>OP_MAYOR_IG</color>
+21 -d-> end21
+state 22 <<accept>> : <color:blue>OP_MAYOR</color>\n<color:blue>rollback</COLOR>
+22 -d-> end22
+
+' --- Fila 6: Delimitadores ---
+C4 ----> C5
+C5 -l-> 23
+
+
+C5 -r-> 26
+
 @enduml
