@@ -101,7 +101,7 @@ edades[1] = 99;
 
 ### Arreglos multidimensionales
 
-Se permiten mediante la notación anidada `fila_india(fila_india(T))`. La inicialización anida corchetes y el acceso encadena corchetes:
+Se permiten mediante la notación anidada `fila_india(fila_india(T))`. La inicialización anida paréntesis cuadrados y el acceso encadena paréntesis cuadrados:
 
 ```
 vara fila_india(fila_india(colones)) matriz = [[1, 2], [3, 4]];
