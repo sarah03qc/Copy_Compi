@@ -1,0 +1,30 @@
+// Función que verifica si una hilera (labia) es palíndrome en CR++
+// Se representa la palabra como un fila_india(labia) de caracteres individuales.
+
+chunche diay esPalindromo(fila_india(labia) chars, colones largo) {
+    vara colones izq = 0;
+    vara colones der = largo - 1;
+    vara diay resultado = diay_si;
+    bretee (izq < der) {
+        mae (chars(izq) != chars(der)) {
+            resultado = diay_no;
+            jaleas;
+        }
+        izq++;
+        der--;
+    }
+    tomela resultado;
+} : diay
+
+chunche ni_papa chante() {
+    // "anilina" -> palíndrome
+    vara fila_india(labia) palabra = ["a", "n", "i", "l", "i", "n", "a"];
+
+    vara diay res = esPalindromo(palabra, 7);
+    mae (res == diay_si) {
+        miau("La palabra es palindromo");
+    } tons {
+        miau("La palabra NO es palindromo");
+    }
+    tomela ni_papa;
+} : ni_papa
