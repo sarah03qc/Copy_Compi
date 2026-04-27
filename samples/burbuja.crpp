@@ -5,10 +5,10 @@ chunche ni_papa burbuja(fila_india(colones) arr, colones n) {
     bretee (i < n) {
         vara colones j = 0;
         bretee (j < n - i - 1) {
-            mae (arr(j) > arr(j + 1)) {
-                vara colones temp = arr(j);
-                arr(j) = arr(j + 1);
-                arr(j + 1) = temp;
+            mae (arr[j] > arr[j + 1]) {
+                vara colones temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
             }
             j++;
         }
@@ -25,7 +25,7 @@ chunche ni_papa chante() {
     miau("Arreglo ordenado: ");
     vara colones k = 0;
     bretee (k < 5) {
-        miau(datos(k));
+        miau(datos[k]);
         k++;
     }
     tomela ni_papa;

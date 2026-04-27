@@ -92,20 +92,20 @@ Alerta Jaguarsh: índice fuera de rango
 
 ### Acceso a elementos
 
-El acceso a un elemento se realiza con la notación de paréntesis:
+El acceso a un elemento se realiza con la notación de paréntesis cuadrados:
 
 ```
-vara colones x = edades(0);
-edades(1) = 99;
+vara colones x = edades[0];
+edades[1] = 99;
 ```
 
 ### Arreglos multidimensionales
 
-Se permiten mediante la notación anidada `fila_india(fila_india(T))`. La inicialización anida corchetes y el acceso encadena paréntesis:
+Se permiten mediante la notación anidada `fila_india(fila_india(T))`. La inicialización anida corchetes y el acceso encadena corchetes:
 
 ```
 vara fila_india(fila_india(colones)) matriz = [[1, 2], [3, 4]];
-vara colones x = matriz(0)(1);
+vara colones x = matriz[0][1];
 ```
 
 ### Paso a funciones

@@ -6,7 +6,7 @@ chunche diay esPalindromo(fila_india(labia) chars, colones largo) {
     vara colones der = largo - 1;
     vara diay resultado = diay_si;
     bretee (izq < der) {
-        mae (chars(izq) != chars(der)) {
+        mae (chars[izq] != chars[der]) {
             resultado = diay_no;
             jaleas;
         }
