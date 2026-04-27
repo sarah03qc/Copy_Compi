@@ -210,69 +210,71 @@ FACTOR_INDEX    → [ EXPRESION ] FACTOR_INDEX | ε
 
 ### Keywords
 
-| Token | Lexema(s) |
-|---|---|
-| `FUNCION` | `chunche` |
-| `VARIABLE` | `vara` |
-| `CONSTANTE` | `de_fijo` |
-| `ENTERO` | `colones` |
-| `BOOLEANO` | `diay` |
-| `CADENA` | `labia` |
-| `VACIO` | `ni_papa` |
-| `ARREGLO` | `fila_india` |
-| `CONDICIONAL` | `mae` |
-| `SINO` | `tons` |
-| `CICLO_INDEF` | `bretee` |
-| `RETORNAR` | `tomela` / `tómela` |
-| `IMPRIMIR` | `miau` |
-| `RECIBIR` | `me_la_comi` / `me_la_comí` |
-| `BREAK` | `jaleas` |
-| `CONTINUE` | `dele_dele` |
-| `VERDADERO` | `diay_si` / `diay_sí` |
-| `FALSO` | `diay_no` |
+| Token         | Lexema(s)                   |
+|---------------|-----------------------------|
+| `FUNCION`     | `chunche`                   |
+| `VARIABLE`    | `vara`                      |
+| `CONSTANTE`   | `de_fijo`                   |
+| `ENTERO`      | `colones`                   |
+| `BOOLEANO`    | `diay`                      |
+| `CADENA`      | `labia`                     |
+| `VACIO`       | `ni_papa`                   |
+| `ARREGLO`     | `fila_india`                |
+| `CONDICIONAL` | `mae`                       |
+| `SINO`        | `tons`                      |
+| `CICLO_INDEF` | `bretee`                    |
+| `RETORNAR`    | `tomela` / `tómela`         |
+| `IMPRIMIR`    | `miau`                      |
+| `RECIBIR`     | `me_la_comi` / `me_la_comí` |
+| `BREAK`       | `jaleas`                    |
+| `CONTINUE`    | `dele_dele`                 |
+| `VERDADERO`   | `diay_si` / `diay_sí`       |
+| `FALSO`       | `diay_no`                   |
 
 ### Identificadores y Literales
 
-| Token | Lexema(s) — patrón regex |
-|---|---|
-| `IDENT` | `[a-zA-ZÁÉÍÓÚáéíóúÜüÑñ_][a-zA-ZÁÉÍÓÚáéíóúÜüÑñ0-9_]*` |
-| `LIT_ENTERO` | `[0-9]+` |
-| `LIT_STRING` | `"[^"]*"` |
+| Token        | Lexema(s) — patrón regex                                             |
+|--------------|----------------------------------------------------------------------|
+| `IDENT`      | `[a-zA-ZÁÉÍÓÚáéíóúÄäËëÏïÖöÜüÑñ_][a-zA-ZÁÉÍÓÚáéíóúÄäËëÏïÖöÜüÑñ0-9_]*` |
+| `LIT_ENTERO` | `[0-9]+`                                                             |
+| `LIT_STRING` | `"[^"]*"`                                                            |
 
 ### Operadores
 
-| Token | Lexema |
-|---|---|
-| `OP_SUMA` | `+` |
-| `OP_RESTA` | `-` |
-| `OP_MUL` | `*` |
-| `OP_DIV` | `/` |
-| `OP_INC` | `++` |
-| `OP_DEC` | `--` |
-| `OP_ASIG` | `=` |
-| `OP_IGUALD` | `==` |
-| `OP_DIFE` | `!=` |
-| `OP_MAYOR` | `>` |
-| `OP_MENOR` | `<` |
-| `OP_MAYOR_IG` | `>=` |
-| `OP_MENOR_IG` | `<=` |
-| `OP_Y` | `&&` |
-| `OP_O` | `\|\|` |
-| `OP_NOT` | `!` |
+| Token          | Lexema |
+|----------------|--------|
+| `OP_SUMA`      | `+`    |
+| `OP_RESTA`     | `-`    |
+| `OP_MUL`       | `*`    |
+| `OP_DIV`       | `/`    |
+| `OP_INC`       | `++`   |
+| `OP_DEC`       | `--`   |
+| `OP_ASIG`      | `=`    |
+| `OP_IGUALD`    | `==`   |
+| `OP_DIFE`      | `!=`   |
+| `OP_MAYOR`     | `>`    |
+| `OP_MENOR`     | `<`    |
+| `OP_MAYOR_IG`  | `>=`   |
+| `OP_MENOR_IG`  | `<=`   |
+| `OP_Y`         | `&&`   |
+| `OP_O`         | `\|\|` |
+| `OP_NO`        | `!`    |
 
 ### Delimitadores
 
-| Token | Lexema |
-|---|---|
-| `PAREN_ABIERTO` | `(` |
-| `PAREN_CERRADO` | `)` |
-| `LLAVE_ABIERTA` | `{` |
-| `LLAVE_CERRADA` | `}` |
-| `CORCHETE_ABIERTO` | `[` |
-| `CORCHETE_CERRADO` | `]` |
-| `FIN_SENTENCIA` | `;` |
-| `SEPARAR` | `,` |
-| `DOS_PUNTOS` | `:` |
+| Token              | Lexema(s)           |
+|--------------------|---------------------|
+| `PAREN_ABIERTO`    | `(`                 |
+| `PAREN_CERRADO`    | `)`                 |
+| `LLAVE_ABIERTA`    | `{`                 |
+| `LLAVE_CERRADA`    | `}`                 |
+| `CORCHETE_ABIERTO` | `[`                 |
+| `CORCHETE_CERRADO` | `]`                 |
+| `FIN_SENTENCIA`    | `;`                 |
+| `SEPARAR`          | `,`                 |
+| `DOS_PUNTOS`       | `:`                 |
+| `ESPACIO`          | `WS` `\t` `\n` `\r` |
+| `EOF`              | `EOF`               |
  
 ---
 
@@ -289,79 +291,79 @@ Se define `FIRST(α)` como el conjunto de terminales que pueden aparecer como pr
 
 #### No-terminales de programa y función
 
-| No-terminal | FIRST |
-|---|---|
-| `PROGRAMA` | `{ chunche }` |
+| No-terminal | FIRST            |
+|-------------|------------------|
+| `PROGRAMA`  | `{ chunche }`    |
 | `PROGRAMA'` | `{ chunche, ε }` |
-| `DECL_FUNC` | `{ chunche }` |
+| `DECL_FUNC` | `{ chunche }`    |
 
 #### Tipos
 
-| No-terminal | FIRST |
-|---|---|
-| `TIPO` | `{ colones, diay, labia, ni_papa, fila_india }` |
+| No-terminal | FIRST                                           |
+|-------------|-------------------------------------------------|
+| `TIPO`      | `{ colones, diay, labia, ni_papa, fila_india }` |
 
 #### Parámetros
 
-| No-terminal | FIRST |
-|---|---|
-| `PARAMS` | `{ colones, diay, labia, ni_papa, fila_india, ε }` |
-| `PARAMS'` | `{ ,, ε }` |
-| `PARAM` | `{ colones, diay, labia, ni_papa, fila_india }` |
+| No-terminal | FIRST                                              |
+|-------------|----------------------------------------------------|
+| `PARAMS`    | `{ colones, diay, labia, ni_papa, fila_india, ε }` |
+| `PARAMS'`   | `{ ,, ε }`                                         |
+| `PARAM`     | `{ colones, diay, labia, ni_papa, fila_india }`    |
 
 #### Bloque y sentencias
 
 Sea `FIRST_SENTENCIA` = `{ vara, de_fijo, tomela, mae, bretee, miau, jaleas, dele_dele, IDENT }`.
 
-| No-terminal | FIRST |
-|---|---|
-| `BLOQUE` | `{ { }` |
-| `SENTENCIAS` | `FIRST_SENTENCIA` |
-| `SENTENCIAS'` | `FIRST_SENTENCIA ∪ { ε }` |
-| `SENTENCIA` | `FIRST_SENTENCIA` |
-| `DECL_VAR` | `{ vara }` |
-| `DECL_CONST` | `{ de_fijo }` |
-| `SENT_RETORNO` | `{ tomela }` |
-| `SENT_COND` | `{ mae }` |
-| `SINO_OPC` | `{ tons, ε }` |
-| `SENT_CICLO` | `{ bretee }` |
-| `SENT_PRINT` | `{ miau }` |
-| `SENT_BREAK` | `{ jaleas }` |
-| `SENT_CONTINUE` | `{ dele_dele }` |
-| `SENT_EXPR` | `{ IDENT }` |
-| `SENT_IDENT_COLA` | `{ =, (, ++, -- }` |
-| `SENT_INDEX_COLA` | `{ = }` |
+| No-terminal       | FIRST                     |
+|-------------------|---------------------------|
+| `BLOQUE`          | `{ { }`                   |
+| `SENTENCIAS`      | `FIRST_SENTENCIA`         |
+| `SENTENCIAS'`     | `FIRST_SENTENCIA ∪ { ε }` |
+| `SENTENCIA`       | `FIRST_SENTENCIA`         |
+| `DECL_VAR`        | `{ vara }`                |
+| `DECL_CONST`      | `{ de_fijo }`             |
+| `SENT_RETORNO`    | `{ tomela }`              |
+| `SENT_COND`       | `{ mae }`                 |
+| `SINO_OPC`        | `{ tons, ε }`             |
+| `SENT_CICLO`      | `{ bretee }`              |
+| `SENT_PRINT`      | `{ miau }`                |
+| `SENT_BREAK`      | `{ jaleas }`              |
+| `SENT_CONTINUE`   | `{ dele_dele }`           |
+| `SENT_EXPR`       | `{ IDENT }`               |
+| `SENT_IDENT_COLA` | `{ =, (, ++, -- }`        |
+| `SENT_INDEX_COLA` | `{ = }`                   |
 
 #### Argumentos
 
-| No-terminal | FIRST |
-|---|---|
-| `ARGS` | `FIRST(EXPRESION) ∪ { ε }` |
-| `ARGS'` | `{ ,, ε }` |
+| No-terminal | FIRST                      |
+|-------------|----------------------------|
+| `ARGS`      | `FIRST(EXPRESION) ∪ { ε }` |
+| `ARGS'`     | `{ ,, ε }`                 |
 
 #### Expresiones
 
 Sea `FIRST_FACTOR` = `{ !, -, (, [, IDENT, LIT_ENTERO, LIT_STRING, diay_si, diay_no, me_la_comi }`.
 
-| No-terminal | FIRST |
-|---|---|
-| `EXPRESION` | `FIRST_FACTOR` |
-| `OR_EXPR` | `FIRST_FACTOR` |
-| `OR_EXPR'` | `{ \|\|, ε }` |
-| `AND_EXPR` | `FIRST_FACTOR` |
-| `AND_EXPR'` | `{ &&, ε }` |
-| `EQUAL_EXPR` | `FIRST_FACTOR` |
-| `EQUAL_EXPR'` | `{ ==, !=, ε }` |
-| `RELAC_EXPR` | `FIRST_FACTOR` |
-| `RELAC_EXPR'` | `{ <, <=, >, >=, ε }` |
-| `ARIT_EXPR` | `FIRST_FACTOR` |
-| `ARIT_EXPR'` | `{ +, -, ε }` |
-| `TERMINO` | `FIRST_FACTOR` |
-| `TERMINO'` | `{ *, /, ε }` |
-| `FACTOR` | `FIRST_FACTOR` |
-| `FACTOR_BASE` | `{ (, [, IDENT, LIT_ENTERO, LIT_STRING, diay_si, diay_no, me_la_comi }` |
-| `FACTOR'` | `{ ++, --, (, ε }` |
-| `FACTOR_INDEX` | `{ (, ε }` |
+| No-terminal    | FIRST                                                                   |
+|----------------|-------------------------------------------------------------------------|
+| `EXPRESION`    | `FIRST_FACTOR`                                                          |
+| `OR_EXPR`      | `FIRST_FACTOR`                                                          |
+| `OR_EXPR'`     | `{ \|\|, ε }`                                                           |
+| `AND_EXPR`     | `FIRST_FACTOR`                                                          |
+| `AND_EXPR'`    | `{ &&, ε }`                                                             |
+| `EQUAL_EXPR`   | `FIRST_FACTOR`                                                          |
+| `EQUAL_EXPR'`  | `{ ==, !=, ε }`                                                         |
+| `RELAC_EXPR`   | `FIRST_FACTOR`                                                          |
+| `RELAC_EXPR'`  | `{ <, <=, >, >=, ε }`                                                   |
+| `ARIT_EXPR`    | `FIRST_FACTOR`                                                          |
+| `ARIT_EXPR'`   | `{ +, -, ε }`                                                           |
+| `TERMINO`      | `FIRST_FACTOR`                                                          |
+| `TERMINO'`     | `{ *, /, ε }`                                                           |
+| `FACTOR`       | `FIRST_FACTOR`                                                          |
+| `FACTOR_BASE`  | `{ (, [, IDENT, LIT_ENTERO, LIT_STRING, diay_si, diay_no, me_la_comi }` |
+| `FACTOR'`      | `{ ++, --, (, ε }`                                                      |
+| `FACTOR_INDEX` | `{ (, ε }`                                                              |
  
 ---
 
@@ -369,50 +371,50 @@ Sea `FIRST_FACTOR` = `{ !, -, (, [, IDENT, LIT_ENTERO, LIT_STRING, diay_si, diay
 
 Se define `FOLLOW(A)` como el conjunto de terminales que pueden aparecer inmediatamente a la derecha de `A` en alguna forma sentencial. `EOF` se añade a `FOLLOW` del símbolo inicial.
 
-| No-terminal | FOLLOW |
-|---|---|
-| `PROGRAMA` | `{ EOF }` |
-| `PROGRAMA'` | `{ EOF }` |
-| `DECL_FUNC` | `{ chunche, EOF }` |
-| `TIPO` | `{ IDENT, (, ) }` |
-| `PARAMS` | `{ ) }` |
-| `PARAMS'` | `{ ) }` |
-| `PARAM` | `{ ,, ) }` |
-| `BLOQUE` | `{ chunche, EOF, tons, vara, de_fijo, tomela, mae, bretee, miau, jaleas, dele_dele, IDENT, } }` |
-| `SENTENCIAS` | `{ } }` |
-| `SENTENCIAS'` | `{ } }` |
-| `SENTENCIA` | `FIRST_SENTENCIA ∪ { } }` |
-| `DECL_VAR` | `FOLLOW(SENTENCIA)` |
-| `DECL_CONST` | `FOLLOW(SENTENCIA)` |
-| `SENT_RETORNO` | `FOLLOW(SENTENCIA)` |
-| `SENT_COND` | `FOLLOW(SENTENCIA)` |
-| `SINO_OPC` | `FOLLOW(SENTENCIA)` |
-| `SENT_CICLO` | `FOLLOW(SENTENCIA)` |
-| `SENT_PRINT` | `FOLLOW(SENTENCIA)` |
-| `SENT_BREAK` | `FOLLOW(SENTENCIA)` |
-| `SENT_CONTINUE` | `FOLLOW(SENTENCIA)` |
-| `SENT_EXPR` | `FOLLOW(SENTENCIA)` |
-| `SENT_IDENT_COLA` | `FOLLOW(SENTENCIA)` |
-| `SENT_INDEX_COLA` | `FOLLOW(SENTENCIA)` |
-| `ARGS` | `{ ) }` |
-| `ARGS'` | `{ ) }` |
-| `EXPRESION` | `{ ;, ), ,, } }` |
-| `OR_EXPR` | `FOLLOW(EXPRESION)` |
-| `OR_EXPR'` | `FOLLOW(EXPRESION)` |
-| `AND_EXPR` | `{ \|\| } ∪ FOLLOW(OR_EXPR')` |
-| `AND_EXPR'` | `FOLLOW(AND_EXPR)` |
-| `EQUAL_EXPR` | `{ && } ∪ FOLLOW(AND_EXPR')` |
-| `EQUAL_EXPR'` | `FOLLOW(EQUAL_EXPR)` |
-| `RELAC_EXPR` | `{ ==, != } ∪ FOLLOW(EQUAL_EXPR')` |
-| `RELAC_EXPR'` | `FOLLOW(RELAC_EXPR)` |
-| `ARIT_EXPR` | `{ <, <=, >, >= } ∪ FOLLOW(RELAC_EXPR')` |
-| `ARIT_EXPR'` | `FOLLOW(ARIT_EXPR)` |
-| `TERMINO` | `{ +, - } ∪ FOLLOW(ARIT_EXPR')` |
-| `TERMINO'` | `FOLLOW(TERMINO)` |
-| `FACTOR` | `{ *, / } ∪ FOLLOW(TERMINO')` |
-| `FACTOR_BASE` | `{ ++, --, (, ;, ), ,, }, *, /, +, -, <, <=, >, >=, ==, !=, &&, \|\| }` |
-| `FACTOR'` | `FOLLOW(FACTOR)` |
-| `FACTOR_INDEX` | `FOLLOW(FACTOR')` |
+| No-terminal       | FOLLOW                                                                                          |
+|-------------------|-------------------------------------------------------------------------------------------------|
+| `PROGRAMA`        | `{ EOF }`                                                                                       |
+| `PROGRAMA'`       | `{ EOF }`                                                                                       |
+| `DECL_FUNC`       | `{ chunche, EOF }`                                                                              |
+| `TIPO`            | `{ IDENT, (, ) }`                                                                               |
+| `PARAMS`          | `{ ) }`                                                                                         |
+| `PARAMS'`         | `{ ) }`                                                                                         |
+| `PARAM`           | `{ ,, ) }`                                                                                      |
+| `BLOQUE`          | `{ chunche, EOF, tons, vara, de_fijo, tomela, mae, bretee, miau, jaleas, dele_dele, IDENT, } }` |
+| `SENTENCIAS`      | `{ } }`                                                                                         |
+| `SENTENCIAS'`     | `{ } }`                                                                                         |
+| `SENTENCIA`       | `FIRST_SENTENCIA ∪ { } }`                                                                       |
+| `DECL_VAR`        | `FOLLOW(SENTENCIA)`                                                                             |
+| `DECL_CONST`      | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_RETORNO`    | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_COND`       | `FOLLOW(SENTENCIA)`                                                                             |
+| `SINO_OPC`        | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_CICLO`      | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_PRINT`      | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_BREAK`      | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_CONTINUE`   | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_EXPR`       | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_IDENT_COLA` | `FOLLOW(SENTENCIA)`                                                                             |
+| `SENT_INDEX_COLA` | `FOLLOW(SENTENCIA)`                                                                             |
+| `ARGS`            | `{ ) }`                                                                                         |
+| `ARGS'`           | `{ ) }`                                                                                         |
+| `EXPRESION`       | `{ ;, ), ,, } }`                                                                                |
+| `OR_EXPR`         | `FOLLOW(EXPRESION)`                                                                             |
+| `OR_EXPR'`        | `FOLLOW(EXPRESION)`                                                                             |
+| `AND_EXPR`        | `{ \|\| } ∪ FOLLOW(OR_EXPR')`                                                                   |
+| `AND_EXPR'`       | `FOLLOW(AND_EXPR)`                                                                              |
+| `EQUAL_EXPR`      | `{ && } ∪ FOLLOW(AND_EXPR')`                                                                    |
+| `EQUAL_EXPR'`     | `FOLLOW(EQUAL_EXPR)`                                                                            |
+| `RELAC_EXPR`      | `{ ==, != } ∪ FOLLOW(EQUAL_EXPR')`                                                              |
+| `RELAC_EXPR'`     | `FOLLOW(RELAC_EXPR)`                                                                            |
+| `ARIT_EXPR`       | `{ <, <=, >, >= } ∪ FOLLOW(RELAC_EXPR')`                                                        |
+| `ARIT_EXPR'`      | `FOLLOW(ARIT_EXPR)`                                                                             |
+| `TERMINO`         | `{ +, - } ∪ FOLLOW(ARIT_EXPR')`                                                                 |
+| `TERMINO'`        | `FOLLOW(TERMINO)`                                                                               |
+| `FACTOR`          | `{ *, / } ∪ FOLLOW(TERMINO')`                                                                   |
+| `FACTOR_BASE`     | `{ ++, --, (, ;, ), ,, }, *, /, +, -, <, <=, >, >=, ==, !=, &&, \|\| }`                         |
+| `FACTOR'`         | `FOLLOW(FACTOR)`                                                                                |
+| `FACTOR_INDEX`    | `FOLLOW(FACTOR')`                                                                               |
  
 ---
 
@@ -521,52 +523,52 @@ Las producciones se numeran a continuación para referencia en la tabla:
 
 > Sea `FF` = `{ !, -, (, [, IDENT, LIT_ENTERO, LIT_STRING, diay_si, diay_no, me_la_comi }` y `FS` = `{ vara, de_fijo, tomela, mae, bretee, miau, jaleas, dele_dele, IDENT }` para abreviar.
 
-| No-terminal | `chunche` | `vara` | `de_fijo` | `colones` | `diay` | `labia` | `ni_papa` | `fila_india` | `mae` | `tons` | `bretee` | `tomela` | `miau` | `me_la_comi` | `jaleas` | `dele_dele` | `diay_si` | `diay_no` | `IDENT` | `LIT_ENTERO` | `LIT_STRING` | `(` | `)` | `[` | `]` | `{` | `}` | `;` | `,` | `=` | `==` | `!=` | `<` | `<=` | `>` | `>=` | `&&` | `\|\|` | `!` | `+` | `-` | `*` | `/` | `++` | `--` | `EOF` |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `PROGRAMA` | 1 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `PROGRAMA'` | 2 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 3 |
-| `DECL_FUNC` | 4 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `TIPO` | — | — | — | 5 | 6 | 7 | 8 | 9 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `PARAMS` | — | — | — | 10 | 10 | 10 | 10 | 10 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 11 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `PARAMS'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 13 | — | — | — | — | — | 12 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `PARAM` | — | — | — | 14 | 14 | 14 | 14 | 14 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `BLOQUE` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 15 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENTENCIAS` | — | 16 | 16 | — | — | — | — | — | 16 | — | 16 | 16 | 16 | — | 16 | 16 | — | — | 16 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENTENCIAS'` | — | 17 | 17 | — | — | — | — | — | 17 | — | 17 | 17 | 17 | — | 17 | 17 | — | — | 17 | — | — | — | — | — | — | — | 18 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENTENCIA` | — | 19 | 20 | — | — | — | — | — | 22 | — | 23 | 21 | 24 | — | 25 | 26 | — | — | 27 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `DECL_VAR` | — | 28 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `DECL_CONST` | — | — | 29 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENT_RETORNO` | — | — | — | — | — | — | — | — | — | — | — | 30 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENT_COND` | — | — | — | — | — | — | — | — | 31 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SINO_OPC` | — | 33 | 33 | — | — | — | — | — | 33 | 32 | 33 | 33 | 33 | — | 33 | 33 | — | — | 33 | — | — | — | — | — | — | — | 33 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 33 |
-| `SENT_CICLO` | — | — | — | — | — | — | — | — | — | — | 34 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENT_BREAK` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 35 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENT_CONTINUE` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 36 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENT_PRINT` | — | — | — | — | — | — | — | — | — | — | — | — | 37 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENT_EXPR` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 38 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `SENT_IDENT_COLA` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 40 | — | 41 | — | — | — | — | — | 39 | — | — | — | — | — | — | — | — | — | — | — | — | — | 42 | 43 | — |
-| `SENT_INDEX_COLA` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 45 | — | — | — | — | — | 44 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `ARGS` | — | — | — | — | — | — | — | — | — | — | — | — | — | 46 | — | — | 46 | 46 | 46 | 46 | 46 | 46 | 47 | 46 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 46 | — | 46 | — | — | — | — | — |
-| `ARGS'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 49 | — | — | — | — | — | 48 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `EXPRESION` | — | — | — | — | — | — | — | — | — | — | — | — | — | 50 | — | — | 50 | 50 | 50 | 50 | 50 | 50 | — | 50 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 50 | — | 50 | — | — | — | — | — |
-| `OR_EXPR` | — | — | — | — | — | — | — | — | — | — | — | — | — | 51 | — | — | 51 | 51 | 51 | 51 | 51 | 51 | — | 51 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 51 | — | 51 | — | — | — | — | — |
-| `OR_EXPR'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 53 | — | 53 | — | 53 | 53 | 53 | — | — | — | — | — | — | — | — | 52 | — | — | — | — | — | — | — | — |
-| `AND_EXPR` | — | — | — | — | — | — | — | — | — | — | — | — | — | 54 | — | — | 54 | 54 | 54 | 54 | 54 | 54 | — | 54 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 54 | — | 54 | — | — | — | — | — |
-| `AND_EXPR'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 56 | — | 56 | — | 56 | 56 | 56 | — | — | — | — | — | — | — | 55 | 56 | — | — | — | — | — | — | — | — |
-| `EQUAL_EXPR` | — | — | — | — | — | — | — | — | — | — | — | — | — | 57 | — | — | 57 | 57 | 57 | 57 | 57 | 57 | — | 57 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 57 | — | 57 | — | — | — | — | — |
-| `EQUAL_EXPR'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 60 | — | 60 | — | 60 | 60 | 60 | — | 58 | 59 | — | — | — | — | 60 | 60 | — | — | — | — | — | — | — | — |
-| `RELAC_EXPR` | — | — | — | — | — | — | — | — | — | — | — | — | — | 61 | — | — | 61 | 61 | 61 | 61 | 61 | 61 | — | 61 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 61 | — | 61 | — | — | — | — | — |
-| `RELAC_EXPR'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 66 | — | 66 | — | 66 | 66 | 66 | — | 66 | 66 | 62 | 63 | 64 | 65 | 66 | 66 | — | — | — | — | — | — | — | — |
-| `ARIT_EXPR` | — | — | — | — | — | — | — | — | — | — | — | — | — | 67 | — | — | 67 | 67 | 67 | 67 | 67 | 67 | — | 67 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 67 | — | 67 | — | — | — | — | — |
-| `ARIT_EXPR'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 70 | — | 70 | — | 70 | 70 | 70 | — | 70 | 70 | 70 | 70 | 70 | 70 | 70 | 70 | — | 68 | 69 | — | — | — | — | — |
-| `TERMINO` | — | — | — | — | — | — | — | — | — | — | — | — | — | 71 | — | — | 71 | 71 | 71 | 71 | 71 | 71 | — | 71 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 71 | — | 71 | — | — | — | — | — |
-| `TERMINO'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 74 | — | 74 | — | 74 | 74 | 74 | — | 74 | 74 | 74 | 74 | 74 | 74 | 74 | 74 | — | 74 | 74 | 72 | 73 | — | — | — |
-| `FACTOR` | — | — | — | — | — | — | — | — | — | — | — | — | — | 77 | — | — | 77 | 77 | 77 | 77 | 77 | 77 | — | 77 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 75 | — | 76 | — | — | — | — | — |
-| `FACTOR_BASE` | — | — | — | — | — | — | — | — | — | — | — | — | — | 85 | — | — | 83 | 84 | 80 | 81 | 82 | 78 | — | 79 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `LISTA_ELEMENTOS` | — | — | — | — | — | — | — | — | — | — | — | — | — | 86 | — | — | 86 | 86 | 86 | 86 | 86 | 86 | — | 86 | 87 | — | — | — | — | — | — | — | — | — | — | — | — | — | 86 | — | 86 | — | — | — | — | — |
-| `LISTA_ELEMENTOS'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 89 | — | — | — | 88 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
-| `FACTOR'` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 92 | 94 | 93 | 94 | — | 94 | 94 | 94 | — | 94 | 94 | 94 | 94 | 94 | 94 | 94 | 94 | — | 94 | 94 | 94 | 94 | 90 | 91 | — |
-| `FACTOR_INDEX` | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | 96 | — | 96 | — | 96 | 96 | 96 | — | 96 | 96 | 96 | 96 | 96 | 96 | 96 | 96 | — | 96 | 96 | 96 | 96 | — | — | — |
+| No-terminal        | `chunche` | `vara` | `de_fijo` | `colones` | `diay` | `labia` | `ni_papa` | `fila_india` | `mae` | `tons` | `bretee` | `tomela` | `miau` | `me_la_comi` | `jaleas` | `dele_dele` | `diay_si` | `diay_no` | `IDENT` | `LIT_ENTERO` | `LIT_STRING` | `(` | `)` | `[` | `]` | `{` | `}` | `;` | `,` | `=` | `==` | `!=` | `<` | `<=` | `>` | `>=` | `&&` | `\|\|` | `!` | `+` | `-` | `*` | `/` | `++` | `--` | `EOF` |
+|--------------------|-----------|--------|-----------|-----------|--------|---------|-----------|--------------|-------|--------|----------|----------|--------|--------------|----------|-------------|-----------|-----------|---------|--------------|--------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|------|------|-----|------|-----|------|------|--------|-----|-----|-----|-----|-----|------|------|-------|
+| `PROGRAMA`         | 1         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `PROGRAMA'`        | 2         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | 3     |
+| `DECL_FUNC`        | 4         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `TIPO`             | —         | —      | —         | 5         | 6      | 7       | 8         | 9            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `PARAMS`           | —         | —      | —         | 10        | 10     | 10      | 10        | 10           | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 11  | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `PARAMS'`          | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 13  | —   | —   | —   | —   | —   | 12  | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `PARAM`            | —         | —      | —         | 14        | 14     | 14      | 14        | 14           | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `BLOQUE`           | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | 15  | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENTENCIAS`       | —         | 16     | 16        | —         | —      | —       | —         | —            | 16    | —      | 16       | 16       | 16     | —            | 16       | 16          | —         | —         | 16      | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENTENCIAS'`      | —         | 17     | 17        | —         | —      | —       | —         | —            | 17    | —      | 17       | 17       | 17     | —            | 17       | 17          | —         | —         | 17      | —            | —            | —   | —   | —   | —   | —   | 18  | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENTENCIA`        | —         | 19     | 20        | —         | —      | —       | —         | —            | 22    | —      | 23       | 21       | 24     | —            | 25       | 26          | —         | —         | 27      | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `DECL_VAR`         | —         | 28     | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `DECL_CONST`       | —         | —      | 29        | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENT_RETORNO`     | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | 30       | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENT_COND`        | —         | —      | —         | —         | —      | —       | —         | —            | 31    | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SINO_OPC`         | —         | 33     | 33        | —         | —      | —       | —         | —            | 33    | 32     | 33       | 33       | 33     | —            | 33       | 33          | —         | —         | 33      | —            | —            | —   | —   | —   | —   | —   | 33  | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | 33    |
+| `SENT_CICLO`       | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | 34       | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENT_BREAK`       | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | 35       | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENT_CONTINUE`    | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | 36          | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENT_PRINT`       | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | 37     | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENT_EXPR`        | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | 38      | —            | —            | —   | —   | —   | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `SENT_IDENT_COLA`  | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | 40  | —   | 41  | —   | —   | —   | —   | —   | 39  | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | 42   | 43   | —     |
+| `SENT_INDEX_COLA`  | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | 45  | —   | —   | —   | —   | —   | 44  | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `ARGS`             | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 46           | —        | —           | 46        | 46        | 46      | 46           | 46           | 46  | 47  | 46  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 46  | —   | 46  | —   | —   | —    | —    | —     |
+| `ARGS'`            | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 49  | —   | —   | —   | —   | —   | 48  | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `EXPRESION`        | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 50           | —        | —           | 50        | 50        | 50      | 50           | 50           | 50  | —   | 50  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 50  | —   | 50  | —   | —   | —    | —    | —     |
+| `OR_EXPR`          | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 51           | —        | —           | 51        | 51        | 51      | 51           | 51           | 51  | —   | 51  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 51  | —   | 51  | —   | —   | —    | —    | —     |
+| `OR_EXPR'`         | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 53  | —   | 53  | —   | 53  | 53  | 53  | —   | —    | —    | —   | —    | —   | —    | —    | 52     | —   | —   | —   | —   | —   | —    | —    | —     |
+| `AND_EXPR`         | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 54           | —        | —           | 54        | 54        | 54      | 54           | 54           | 54  | —   | 54  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 54  | —   | 54  | —   | —   | —    | —    | —     |
+| `AND_EXPR'`        | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 56  | —   | 56  | —   | 56  | 56  | 56  | —   | —    | —    | —   | —    | —   | —    | 55   | 56     | —   | —   | —   | —   | —   | —    | —    | —     |
+| `EQUAL_EXPR`       | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 57           | —        | —           | 57        | 57        | 57      | 57           | 57           | 57  | —   | 57  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 57  | —   | 57  | —   | —   | —    | —    | —     |
+| `EQUAL_EXPR'`      | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 60  | —   | 60  | —   | 60  | 60  | 60  | —   | 58   | 59   | —   | —    | —   | —    | 60   | 60     | —   | —   | —   | —   | —   | —    | —    | —     |
+| `RELAC_EXPR`       | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 61           | —        | —           | 61        | 61        | 61      | 61           | 61           | 61  | —   | 61  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 61  | —   | 61  | —   | —   | —    | —    | —     |
+| `RELAC_EXPR'`      | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 66  | —   | 66  | —   | 66  | 66  | 66  | —   | 66   | 66   | 62  | 63   | 64  | 65   | 66   | 66     | —   | —   | —   | —   | —   | —    | —    | —     |
+| `ARIT_EXPR`        | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 67           | —        | —           | 67        | 67        | 67      | 67           | 67           | 67  | —   | 67  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 67  | —   | 67  | —   | —   | —    | —    | —     |
+| `ARIT_EXPR'`       | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 70  | —   | 70  | —   | 70  | 70  | 70  | —   | 70   | 70   | 70  | 70   | 70  | 70   | 70   | 70     | —   | 68  | 69  | —   | —   | —    | —    | —     |
+| `TERMINO`          | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 71           | —        | —           | 71        | 71        | 71      | 71           | 71           | 71  | —   | 71  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 71  | —   | 71  | —   | —   | —    | —    | —     |
+| `TERMINO'`         | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 74  | —   | 74  | —   | 74  | 74  | 74  | —   | 74   | 74   | 74  | 74   | 74  | 74   | 74   | 74     | —   | 74  | 74  | 72  | 73  | —    | —    | —     |
+| `FACTOR`           | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 77           | —        | —           | 77        | 77        | 77      | 77           | 77           | 77  | —   | 77  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 75  | —   | 76  | —   | —   | —    | —    | —     |
+| `FACTOR_BASE`      | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 85           | —        | —           | 83        | 84        | 80      | 81           | 82           | 78  | —   | 79  | —   | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `LISTA_ELEMENTOS`  | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | 86           | —        | —           | 86        | 86        | 86      | 86           | 86           | 86  | —   | 86  | 87  | —   | —   | —   | —   | —   | —    | —    | —   | —    | —   | —    | —    | —      | 86  | —   | 86  | —   | —   | —    | —    | —     |
+| `LISTA_ELEMENTOS'` | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | —   | —   | 89  | —   | —   | —   | 88  | —   | —    | —    | —   | —    | —   | —    | —    | —      | —   | —   | —   | —   | —   | —    | —    | —     |
+| `FACTOR'`          | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | 92  | 94  | 93  | 94  | —   | 94  | 94  | 94  | —   | 94   | 94   | 94  | 94   | 94  | 94   | 94   | 94     | —   | 94  | 94  | 94  | 94  | 90   | 91   | —     |
+| `FACTOR_INDEX`     | —         | —      | —         | —         | —      | —       | —         | —            | —     | —      | —        | —        | —      | —            | —        | —           | —         | —         | —       | —            | —            | —   | 96  | —   | 96  | —   | 96  | 96  | 96  | —   | 96   | 96   | 96  | 96   | 96  | 96   | 96   | 96     | —   | 96  | 96  | 96  | 96  | —    | —    | —     |
 
 ### 4.4 Conclusión
 

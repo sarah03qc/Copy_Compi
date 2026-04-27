@@ -51,12 +51,12 @@ El sistema de tipos es **estático y explícito**:
 
 ### Tipos Primitivos
 
-| Tipo CR++   | Equivalente | Descripción                            |
-|-------------|-------------|----------------------------------------|
-| `colones`   | entero      | Número entero (e.g. `0`, `1`, `-25`)  |
-| `diay`      | booleano    | Valor lógico (`diay_si` o `diay_no`)  |
-| `labia`     | string      | Cadena de texto entre comillas dobles  |
-| `ni_papa`   | void / null | Ausencia de valor o tipo vacío         |
+| Tipo CR++ | Equivalente | Descripción                           |
+|-----------|-------------|---------------------------------------|
+| `colones` | entero      | Número entero (e.g. `0`, `1`, `-25`)  |
+| `diay`    | booleano    | Valor lógico (`diay_si` o `diay_no`)  |
+| `labia`   | string      | Cadena de texto entre comillas dobles |
+| `ni_papa` | void / null | Ausencia de valor o tipo vacío        |
 
 > **Nota:** CR++ no soporta números de punto flotante. Solo existe el tipo entero `colones`.
 
@@ -151,7 +151,7 @@ Ejemplos válidos: `factorial`, `contador`, `MAX`, `mi_variable1`, `índice`
 ```
 chunche <tipo_retorno> <nombre>(<tipo> <param>, ...) {
     <bloque>
-} : <tipo_retorno>
+}
 ```
 
 ### Propiedades
@@ -169,7 +169,7 @@ Todo archivo CR++ debe contener una función denominada `chante`, sin parámetro
 ```
 chunche ni_papa chante() {
     ...
-} : ni_papa
+}
 ```
 
 ### Ejemplo
@@ -181,7 +181,7 @@ chunche colones factorial(colones n) {
     } tons {
         tomela n * factorial(n - 1);
     }
-} : colones
+}
 ```
 
 ---
@@ -226,7 +226,7 @@ La precedencia sigue el modelo del lenguaje C.
 | Incremento   | `++`, `--`                       |
 | Asignación   | `=`                              |
 | Relacionales | `==`, `!=`, `<`, `>`, `<=`, `>=` |
-| Lógicos      | `&&`, `||`, `!`                  |
+| Lógicos      | `&&`, `\|\|`, `!`                |
 
 ---
 
