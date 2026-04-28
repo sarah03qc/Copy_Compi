@@ -36,5 +36,9 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'org.example.App'
+    mainClass = 'edu.ic5701.Compiler'
+}
+
+run {
+    workingDir = rootProject.projectDir
 }

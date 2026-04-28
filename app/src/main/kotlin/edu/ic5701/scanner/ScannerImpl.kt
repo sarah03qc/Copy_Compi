@@ -77,7 +77,7 @@ class ScannerImpl (private val source: String) : Scanner {
     }
 
     /** Lista de errores léxicos encontrados. */
-    val errors: MutableList<String> = mutableListOf()
+    override val errors: MutableList<String> = mutableListOf()
 
     // Estado interno del scanner
     private val firstColumn = 1
