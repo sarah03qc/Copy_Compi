@@ -1,4 +1,3 @@
-// Implementación recursiva de pila de la función factorial en CR++
 
 chunche colones factorial(colones n) {
     mae (n == 0) {

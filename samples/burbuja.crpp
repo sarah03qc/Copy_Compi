@@ -1,4 +1,3 @@
-// Implementación iterativa de ordenamiento burbuja en CR++
 
 chunche ni_papa burbuja(fila_india(colones) arr, colones n) {
     vara colones i = 0;
