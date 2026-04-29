@@ -102,10 +102,197 @@ class ParserImpl(private val tokens: List<Token>) : Parser {
         }
     }
 
-    // no-terminales (esqueleto, TODO)
+    // no-terminales 
+    // producciones 1-3: programa
 
+    /**
+     * PROGRAMA -> DECL_FUNC PROGRAMA'
+     * PROGRAMA' -> DECL_FUNC PROGRAMA' | epsilon
+     *
+     * el programa es una secuencia de una o mas declaraciones de funcion.
+     * termina cuando se llega al EOF.
+     */
     private fun parsePrograma() {
-        // PROGRAMA -> DECL_FUNC PROGRAMA'
-        // se implementa en el commit 2
+        parseDeclFunc()
+        parseProgramaPrima()
     }
+
+    /**
+     * PROGRAMA' -> DECL_FUNC PROGRAMA' | epsilon
+     *
+     * mientras el token actual sea 'chunche' hay otra funcion que parsear.
+     * si es EOF se deriva epsilon y se termina.
+     */
+    private fun parseProgramaPrima() {
+        while (check(TokenType.FUNCION)) {
+            try {
+                parseDeclFunc()
+            } catch (e: ParseException) {
+                synchronize()
+            }
+        }
+        expect(TokenType.EOF)
+    }
+
+    // produccion 4: declaracion de funcion
+
+    /**
+     * DECL_FUNC -> chunche TIPO IDENT ( PARAMS ) BLOQUE : TIPO
+     *
+     * una declaracion de funcion comienza con 'chunche', seguida del tipo
+     * de retorno, el nombre, la lista de parametros entre parentesis,
+     * el cuerpo entre llaves, y finalmente la anotacion de tipo de retorno
+     * separada por dos puntos.
+     */
+    private fun parseDeclFunc() {
+        expect(TokenType.FUNCION)
+        parseTipo()
+        expect(TokenType.IDENT)
+        expect(TokenType.PAREN_ABIERTO)
+        parseParams()
+        expect(TokenType.PAREN_CERRADO)
+        parseBloque()
+        expect(TokenType.DOS_PUNTOS)
+        parseTipo()
+    }
+
+    // produccion 5-9: tipos
+
+    /**
+     * TIPO -> colones | diay | labia | ni_papa | fila_india ( TIPO )
+     *
+     * los primeros cuatro son tipos primitivos y se consumen directamente.
+     * fila_india es recursivo: fila_india ( TIPO ) permite arreglos de
+     * cualquier tipo, incluyendo arreglos de arreglos.
+     */
+    private fun parseTipo() {
+        when {
+            check(TokenType.ENTERO) -> advance()
+            check(TokenType.BOOLEANO) -> advance()
+            check(TokenType.CADENA) -> advance()
+            check(TokenType.VACIO) -> advance()
+            check(TokenType.ARREGLO) -> {
+                advance()
+                expect(TokenType.PAREN_ABIERTO)
+                parseTipo()
+                expect(TokenType.PAREN_CERRADO)
+            }
+            else -> throw reportError(
+                "se esperaba un tipo (colones, diay, labia, ni_papa, fila_india) " +
+                "pero se encontro '${peek().lexeme}' en linea ${peek().line}, columna ${peek().column}"
+            )
+        }
+    }
+
+    // producciones 10-14: parametros
+
+    /**
+     * PARAMS -> PARAM PARAMS' | epsilon
+     *
+     * si el token actual es un tipo, hay al menos un parametro.
+     * si es ')' se deriva epsilon y no se consume nada.
+     */
+    private fun parseParams() {
+        if (isTipoToken()) {
+            parseParam()
+            parseParamsPrima()
+        }
+        // epsilon: el token ')' cierra la lista vacia
+    }
+
+    /**
+     * PARAMS' -> , PARAM PARAMS' | epsilon
+     *
+     * mientras haya comas hay mas parametros que parsear.
+     */
+    private fun parseParamsPrima() {
+        while (check(TokenType.SEPARAR)) {
+            advance()
+            parseParam()
+        }
+        // epsilon: cualquier otro token termina la lista
+    }
+
+    /**
+     * PARAM -> TIPO IDENT
+     *
+     * un parametro es un tipo seguido de un identificador.
+     */
+    private fun parseParam() {
+        parseTipo()
+        expect(TokenType.IDENT)
+    }
+
+    // producciones 15-18: bloque y sentencias
+
+    /**
+     * BLOQUE -> { SENTENCIAS }
+     *
+     * un bloque es una secuencia de sentencias entre llaves.
+     */
+    private fun parseBloque() {
+        expect(TokenType.CORCHETE_ABIERTO)
+        parseSentencias()
+        expect(TokenType.CORCHETE_CERRADO)
+    }
+
+    /**
+     * SENTENCIAS -> SENTENCIA SENTENCIAS'
+     * SENTENCIAS' -> SENTENCIA SENTENCIAS' | epsilon
+     *
+     * se parsean sentencias mientras el token actual sea el inicio
+     * de alguna sentencia valida. cuando se ve '}' se deriva epsilon.
+     */
+    private fun parseSentencias() {
+        while (isSentenciaToken()) {
+            try {
+                parseSentencia()
+            } catch (e: ParseException) {
+                synchronize()
+            }
+        }
+        // epsilon: '}' cierra el bloque
+    }
+
+    /**
+     * SENTENCIA -> DECL_VAR | DECL_CONST | SENT_RETORNO | SENT_COND |
+     *              SENT_CICLO | SENT_PRINT | SENT_BREAK | SENT_CONTINUE |
+     *              SENT_EXPR
+     *
+     * el dispatcher delega segun el token actual usando los conjuntos
+     * FIRST de cada produccion. se implementa completamente en el commit 3.
+     */
+    private fun parseSentencia() {
+        // se implementa en el commit 3
+    }
+
+    // utilidades de clasificacion de tokens
+
+    /**
+     * retorna true si el token actual puede iniciar un tipo.
+     * corresponde al conjunto FIRST(TIPO).
+     */
+    private fun isTipoToken(): Boolean = peek().type in setOf(
+        TokenType.ENTERO,
+        TokenType.BOOLEANO,
+        TokenType.CADENA,
+        TokenType.VACIO,
+        TokenType.ARREGLO
+    )
+
+    /**
+     * retorna true si el token actual puede iniciar una sentencia.
+     * corresponde al conjunto FIRST(SENTENCIA).
+     */
+    private fun isSentenciaToken(): Boolean = peek().type in setOf(
+        TokenType.VARIABLE,
+        TokenType.CONSTANTE,
+        TokenType.RETORNAR,
+        TokenType.CONDICIONAL,
+        TokenType.CICLO_INDEF,
+        TokenType.IMPRIMIR,
+        TokenType.BREAK,
+        TokenType.CONTINUE,
+        TokenType.IDENT
+    )
 }
