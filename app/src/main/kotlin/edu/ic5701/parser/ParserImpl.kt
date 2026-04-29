@@ -259,11 +259,231 @@ class ParserImpl(private val tokens: List<Token>) : Parser {
      *              SENT_CICLO | SENT_PRINT | SENT_BREAK | SENT_CONTINUE |
      *              SENT_EXPR
      *
-     * el dispatcher delega segun el token actual usando los conjuntos
-     * FIRST de cada produccion. se implementa completamente en el commit 3.
+     * el token actual determina de forma unica cual produccion aplicar,
+     * lo cual es posible porque la gramatica es LL(1) y los conjuntos
+     * FIRST de cada alternativa son disjuntos.
      */
     private fun parseSentencia() {
-        // se implementa en el commit 3
+        when (peek().type) {
+            TokenType.VARIABLE    -> parseDeclVar()
+            TokenType.CONSTANTE   -> parseDeclConst()
+            TokenType.RETORNAR    -> parseSentRetorno()
+            TokenType.CONDICIONAL -> parseSentCond()
+            TokenType.CICLO_INDEF -> parseSentCiclo()
+            TokenType.IMPRIMIR    -> parseSentPrint()
+            TokenType.BREAK       -> parseSentBreak()
+            TokenType.CONTINUE    -> parseSentContinue()
+            TokenType.IDENT       -> parseSentExpr()
+            else -> throw reportError(
+                "token inesperado '${peek().lexeme}' al inicio de sentencia " +
+                "en linea ${peek().line}, columna ${peek().column}"
+            )
+        }
+    }
+
+    // producciones 28-29: declaraciones de variable y constante
+
+    /**
+     * DECL_VAR -> vara TIPO IDENT = EXPRESION ;
+     */
+    private fun parseDeclVar() {
+        expect(TokenType.VARIABLE)
+        parseTipo()
+        expect(TokenType.IDENT)
+        expect(TokenType.OP_ASIG)
+        parseExpresion()
+        expect(TokenType.FIN_SENTENCIA)
+    }
+
+    /**
+     * DECL_CONST -> de_fijo TIPO IDENT = EXPRESION ;
+     */
+    private fun parseDeclConst() {
+        expect(TokenType.CONSTANTE)
+        parseTipo()
+        expect(TokenType.IDENT)
+        expect(TokenType.OP_ASIG)
+        parseExpresion()
+        expect(TokenType.FIN_SENTENCIA)
+    }
+
+    // producciones 30-36: sentencias de control
+
+    /**
+     * SENT_RETORNO -> tomela EXPRESION ;
+     */
+    private fun parseSentRetorno() {
+        expect(TokenType.RETORNAR)
+        parseExpresion()
+        expect(TokenType.FIN_SENTENCIA)
+    }
+
+    /**
+     * SENT_COND -> mae ( EXPRESION ) BLOQUE SINO_OPC
+     */
+    private fun parseSentCond() {
+        expect(TokenType.CONDICIONAL)
+        expect(TokenType.PAREN_ABIERTO)
+        parseExpresion()
+        expect(TokenType.PAREN_CERRADO)
+        parseBloque()
+        parseSinoOpc()
+    }
+
+    /**
+     * SINO_OPC -> tons BLOQUE | epsilon
+     *
+     * si el token actual es 'tons' se parsea la rama else.
+     * cualquier otro token deriva epsilon.
+     */
+    private fun parseSinoOpc() {
+        if (check(TokenType.SINO)) {
+            advance()
+            parseBloque()
+        }
+    }
+
+    /**
+     * SENT_CICLO -> bretee ( EXPRESION ) BLOQUE
+     */
+    private fun parseSentCiclo() {
+        expect(TokenType.CICLO_INDEF)
+        expect(TokenType.PAREN_ABIERTO)
+        parseExpresion()
+        expect(TokenType.PAREN_CERRADO)
+        parseBloque()
+    }
+
+    /**
+     * SENT_BREAK -> jaleas ;
+     */
+    private fun parseSentBreak() {
+        expect(TokenType.BREAK)
+        expect(TokenType.FIN_SENTENCIA)
+    }
+
+    /**
+     * SENT_CONTINUE -> dele_dele ;
+     */
+    private fun parseSentContinue() {
+        expect(TokenType.CONTINUE)
+        expect(TokenType.FIN_SENTENCIA)
+    }
+
+    // produccion 37: sentencia de impresion
+
+    /**
+     * SENT_PRINT -> miau ( ARGS ) ;
+     */
+    private fun parseSentPrint() {
+        expect(TokenType.IMPRIMIR)
+        expect(TokenType.PAREN_ABIERTO)
+        parseArgs()
+        expect(TokenType.PAREN_CERRADO)
+        expect(TokenType.FIN_SENTENCIA)
+    }
+
+    // producciones 38-45: sentencias de expresion
+
+    /**
+     * SENT_EXPR -> IDENT SENT_IDENT_COLA
+     */
+    private fun parseSentExpr() {
+        expect(TokenType.IDENT)
+        parseSentIdentCola()
+    }
+
+    /**
+     * SENT_IDENT_COLA -> = EXPRESION ;
+     *                  | ( ARGS ) ;
+     *                  | [ EXPRESION ] SENT_INDEX_COLA
+     *                  | ++ ;
+     *                  | -- ;
+     */
+    private fun parseSentIdentCola() {
+        when (peek().type) {
+            TokenType.OP_ASIG -> {
+                advance()
+                parseExpresion()
+                expect(TokenType.FIN_SENTENCIA)
+            }
+            TokenType.PAREN_ABIERTO -> {
+                advance()
+                parseArgs()
+                expect(TokenType.PAREN_CERRADO)
+                expect(TokenType.FIN_SENTENCIA)
+            }
+            TokenType.LLAVE_ABIERTA -> {
+                advance()
+                parseExpresion()
+                expect(TokenType.LLAVE_CERRADA)
+                parseSentIndexCola()
+            }
+            TokenType.OP_INC -> {
+                advance()
+                expect(TokenType.FIN_SENTENCIA)
+            }
+            TokenType.OP_DEC -> {
+                advance()
+                expect(TokenType.FIN_SENTENCIA)
+            }
+            else -> throw reportError(
+                "se esperaba '=', '(', '[', '++' o '--' despues del identificador " +
+                "'${tokens[current - 1].lexeme}' en linea ${peek().line}, columna ${peek().column}"
+            )
+        }
+    }
+
+    /**
+     * SENT_INDEX_COLA -> = EXPRESION ;
+     *                  | [ EXPRESION ] SENT_INDEX_COLA
+     */
+    private fun parseSentIndexCola() {
+        when (peek().type) {
+            TokenType.OP_ASIG -> {
+                advance()
+                parseExpresion()
+                expect(TokenType.FIN_SENTENCIA)
+            }
+            TokenType.LLAVE_ABIERTA -> {
+                advance()
+                parseExpresion()
+                expect(TokenType.LLAVE_CERRADA)
+                parseSentIndexCola()
+            }
+            else -> throw reportError(
+                "se esperaba '=' o '[' despues del acceso al arreglo " +
+                "en linea ${peek().line}, columna ${peek().column}"
+            )
+        }
+    }
+
+    // producciones 46-49: argumentos
+
+    /**
+     * ARGS -> EXPRESION ARGS' | epsilon
+     */
+    private fun parseArgs() {
+        if (isExpresionToken()) {
+            parseExpresion()
+            parseArgsPrima()
+        }
+    }
+
+    /**
+     * ARGS' -> , EXPRESION ARGS' | epsilon
+     */
+    private fun parseArgsPrima() {
+        while (check(TokenType.SEPARAR)) {
+            advance()
+            parseExpresion()
+        }
+    }
+
+    // esqueleto de expresiones, se completa en el commit 4
+
+    private fun parseExpresion() {
+        // se implementa en el commit 4
     }
 
     // utilidades de clasificacion de tokens
@@ -294,5 +514,22 @@ class ParserImpl(private val tokens: List<Token>) : Parser {
         TokenType.BREAK,
         TokenType.CONTINUE,
         TokenType.IDENT
+    )
+
+    /**
+     * retorna true si el token actual puede iniciar una expresion.
+     * corresponde al conjunto FIRST(EXPRESION) de la gramatica.
+     */
+    private fun isExpresionToken(): Boolean = peek().type in setOf(
+        TokenType.OP_NO,
+        TokenType.OP_RESTA,
+        TokenType.PAREN_ABIERTO,
+        TokenType.LLAVE_ABIERTA,
+        TokenType.IDENT,
+        TokenType.LIT_ENTERO,
+        TokenType.LIT_STRING,
+        TokenType.VERDADERO,
+        TokenType.FALSO,
+        TokenType.RECIBIR
     )
 }
