@@ -19,11 +19,9 @@ repositories {
 }
 
 dependencies {
-    // Use the Kotlin Test integration.
+    // Kotlin Test con runner de JUnit 4
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-
-    // Use JUnit test framework.
-    testImplementation libs.junit
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
 
     // This dependency is used by the application.
     implementation libs.guava
@@ -38,5 +36,9 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'org.example.App'
+    mainClass = 'edu.ic5701.Compiler'
+}
+
+run {
+    workingDir = rootProject.projectDir
 }

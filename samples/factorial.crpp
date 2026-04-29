@@ -1,0 +1,14 @@
+// Implementación recursiva de pila de la función factorial en CR++
+
+chunche colones factorial(colones n) {
+    mae (n == 0) {
+        tomela 1;
+    } tons {
+        tomela n * factorial(n - 1);
+    }
+} : colones
+
+chunche ni_papa chante() {
+    vara colones resultado = factorial(10);
+    miau("factorial(10) = ", resultado);
+} : ni_papa

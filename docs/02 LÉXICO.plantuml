@@ -29,6 +29,9 @@ state " " as C5 <<choice>>
 state " " as C6 <<choice>>
 state " " as C7 <<choice>>
 state " " as C8 <<choice>>
+state " " as C9 <<choice>>
+state " " as C10 <<choice>>
+state " " as C11 <<choice>>
 
 ' Ayudantes de autoreferencia
 state " " as 1R<<choice>>
@@ -40,7 +43,6 @@ state end4 <<end>>
 state end6 <<end>>
 state end8 <<end>>
 state end9 <<end>>
-state end49 <<end>>
 state end11 <<end>>
 state end12 <<end>>
 state end13 <<end>>
@@ -48,62 +50,66 @@ state end14 <<end>>
 state end16 <<end>>
 state end17 <<end>>
 state end19 <<end>>
-state end24 <<end>>
-state end25 <<end>>
-state end21 <<end>>
+state end20 <<end>>
 state end22 <<end>>
+state end23 <<end>>
+state end25 <<end>>
 state end27 <<end>>
-state end29 <<end>>
+state end28 <<end>>
 state end30 <<end>>
 state end31 <<end>>
 state end32 <<end>>
 state end33 <<end>>
 state end34 <<end>>
 state end35 <<end>>
+state end36 <<end>>
 state end37 <<end>>
 state end38 <<end>>
+state end39 <<end>>
+state end40 <<end>>
+state end41 <<end>>
 
-' --- Fila 0 ---
+' --- Raíz ---
 [*] --> 0
 0 --> C0
 
-' --- Fila 1 ---
+' --- Fila 0: STRING, IDENTIFICADOR ---
 C0 -r> 1R
 
-1R -d-> 1 : [ a-zA-Z á ä Á Ä é ë É Ë í ï Í Ï ó ö Ó Ö ú ü Ú Ü ñ Ñ _ ]
-1 --> 1 : [ a-zA-Z á ä Á Ä é ë É Ë í ï Í Ï ó ö Ó Ö ú ü Ú Ü ñ Ñ _ ]
+1R -d-> 1 : <color:maroon>[</color> a<color:maroon>-</color>z A<color:maroon>-</color>Z á ä Á Ä é ë É Ë í ï Í Ï ó ö Ó Ö ú ü Ú Ü ñ Ñ _ <color:maroon>]</color>
+1 --> 1 : <color:maroon>[</color> 0<color:maroon>-</color>9 a<color:maroon>-</color>z A<color:maroon>-</color>Z  á ä Á Ä é ë É Ë í ï Í Ï ó ö Ó Ö ú ü Ú Ü ñ Ñ _ <color:maroon>]</color>
 1 --> 2 : <color:Tomato>otro</color>
 state 2 <<accept>> : <color:blue>IDENT</color>\n<color:blue>rollback</COLOR>
 2 -d-> end2
 
-C0 -l> 3R
+C0 --l-> 3R
 3R -d-> 3 : <size:15>"</size>
 3 -> 3 : <color:Tomato>otro</color>
 3 --> 4 : <size:15>"</size>
 state 4 <<accept>> : <color:blue>LIT_STRING</color>
 4 -d-> end4
 
-' --- Fila 2 ---
+' --- Fila 1: DECREMENTO/RESTA,  ENTERO ---
 C0 -----> C1
 
-C1 -r-> 5 : [0-9]
-5 --> 5 : [0-9]
+C1 -r-> 5 : <color:maroon>[</color>0<color:maroon>-</color>9<color:maroon>]</color>
+5 --> 5 : <color:maroon>[</color>0<color:maroon>-</color>9<color:maroon>]</color>
 5 --> 6 : <color:Tomato>otro</color>
 state 6 <<accept>> : <color:blue>LIT_ENTERO</color>\n<color:blue>rollback</COLOR>
 6 -d-> end6
 
 C1 -l-> 7 : <size:15>-</size>
-7 --> 8 : <size:15>-</size>
+7 -l-> 8 : <size:15>-</size>
 7 --> 9 : <color:Tomato>otro</color>
 state 8 <<accept>> : <color:blue>OP_DEC</color>
 8 -d-> end8
 state 9 <<accept>> : <color:blue>OP_REST</color>\n<color:blue>rollback</COLOR>
 9 -d-> end9
-' --- Fila 3: Operadores RESTA / DEC ---
+' --- Fila 2: INCREMENTO/SUMA, MULTIPLICAR ---
 C1 ----> C2
 
 C2 -r-> 10 : <size:15>+</size>
-10 --> 11 : <size:15>+</size>
+10 -r-> 11 : <size:15>+</size>
 10 --> 12 : <color:Tomato>otro</color>
 state 11 <<accept>> : <color:blue>OP_INC</color>
 11 -d-> end11
@@ -111,45 +117,116 @@ state 12 <<accept>> : <color:blue>OP_SUMA</color>\n<color:blue>rollback</COLOR>
 12 -d-> end12
 
 C2 -l-> 13 : <size:15>*</size>
-state 13 <<accept>> : OP_MUL<color:blue>LIT_STRING</color>
+state 13 <<accept>> : <color:blue>OP_MUL</color>
 13 -d-> end13
 
-' --- Fila 4: Operadores SUMA / INC ---
+' --- Fila 3: DIVISION, IGUALDAD/ASIGNAR ---
 C2 ----> C3
 
-C3 -l-> 14 : <size:15>/</size>
+C3 -r-> 14 : <size:15>/</size>
 state 14 <<accept>> : <color:blue>OP_DIV</color>
 14 -d-> end14
 
-C3 -r-> 15 : <size:15>=</size>
+C3 -l-> 15 : <size:15>=</size>
 15 --> 16 : <size:15>=</size>
-15 --> 17 : <color:Tomato>otro</color>
+15 -l-> 17 : <color:Tomato>otro</color>
 state 16 <<accept>> : <color:blue>OP_IGU</color>
 16 -d-> end16
 state 17 <<accept>> : <color:blue>OP_ASIG</color>\n<color:blue>rollback</COLOR>
 17 -d-> end17
 
-' --- Fila 5: Otros Operadores ---
+' --- Fila 4: DIFERENTE/NOT, MAYOR_IG/MAYOR ---
 C3 ----> C4
 
-C4 -l-> 18 : <size:15>!</size>
-18 -l-> 19 : <size:15>=</size>
+C4 -r-> 18 : <size:15>!</size>
+18 -r-> 19 : <size:15>=</size>
+18 -d-> 20 :  <color:Tomato>otro</color>
 state 19 <<accept>> : <color:blue>OP_DIFE</color>
 19 -d-> end19
+state 20 <<accept>> : <color:blue>OP_NO</color>\n<color:blue>rollback</COLOR>
+20 -d-> end20
 
-C4 -r-> 20 : <size:15>></size>
-20 --> 21 : <size:15>=</size>
-20 --> 22 : <color:Tomato>otro</color>
-state 21 <<accept>> : <color:blue>OP_MAYOR_IG</color>
-21 -d-> end21
-state 22 <<accept>> : <color:blue>OP_MAYOR</color>\n<color:blue>rollback</COLOR>
+C4 -l-> 21 : <size:15>></size>
+21 --> 22 : <size:15>=</size>
+21 -l-> 23 : <color:Tomato>otro</color>
+state 22 <<accept>> : <color:blue>OP_MAYOR_IG</color>
 22 -d-> end22
+state 23 <<accept>> : <color:blue>OP_MAYOR</color>\n<color:blue>rollback</COLOR>
+23 -d-> end23
 
-' --- Fila 6: Delimitadores ---
+' --- Fila 5: AND, MENOR/MENOR_IGUAL ---
 C4 ----> C5
-C5 -l-> 23
+C5 -r-> 24 : <size:15>&</size>
+24 -d-> 25 : <size:15>&</size>
+state 25 <<accept>> : <color:blue>OP_Y</color>
+25 -d-> end25
 
 
-C5 -r-> 26
+C5 -l-> 26 : <size:15><</size>
+26 --> 27 : <color:Tomato>otro</color>
+26 -l-> 28 : <size:15>=</size>
+state 27 <<accept>> : <color:blue>OP_MENOR</color>\n<color:blue>rollback</COLOR>
+27 -d-> end27
+state 28 <<accept>> : <color:blue>OP_MENOR_IG</color>
+28 -d-> end28
 
+' --- Fila 6: OR, PAR_AB ---
+C5 ----> C6
+C6 -r-> 29 : <size:15>|</size>
+29 -d-> 30 : <size:15>|</size>
+state 30 <<accept>> : <color:blue>OP_O</color>
+30 -d-> end30
+
+C6 -l-> 31 : <size:15>(</size>
+state 31 <<accept>> : <color:blue>PAREN_ABIERTO</color>
+31 -d-> end31
+
+' --- Fila 7: PAR_CER, LLAVE_AB ---
+C6 ----> C7
+C7 -r-> 32 : <size:15>)</size>
+state 32 <<accept>> : <color:blue>PAREN_CERRADO</color>
+32 -d-> end32
+
+C7 -l-> 33 : <size:15>[</size>
+state 33 <<accept>> : <color:blue>LLAVE_ABIERTA</color>
+33 -d-> end33
+
+' --- Fila 8: LLAVE_CER, COR_AB ---
+C7 ----> C8
+C8 -r-> 34 : <size:15>]</size>
+state 34 <<accept>> : <color:blue>LLAVE_CERRADA</color>
+34 -d-> end34
+
+C8 -l-> 35 : <size:15>{</size>
+state 35 <<accept>> : <color:blue>CORCHETE_ABIERTO</color>
+35 -d-> end35
+
+' --- Fila 9: COR_CER, FIN_SEN ---
+C8 ----> C9
+C9 -r-> 36 : <size:15>}</size>
+state 36 <<accept>> : <color:blue>CORCHETE_CERRADO</color>
+36 -d-> end36
+
+C9 -l-> 37 : <size:15>;</size>
+state 37 <<accept>> : <color:blue>FIN_SENTENCIA</color>
+37 -d-> end37
+
+' --- Fila 10: SEPARAR, DOS_PTS ---
+C9 ----> C10
+C10 -r-> 38 : <size:15>,</size>
+state 38 <<accept>> : <color:blue>SEPARAR</color>
+38 -d-> end38
+
+C10 -l-> 39 : <size:15>:</size>
+state 39 <<accept>> : <color:blue>DOS_PUNTOS</color>
+39 -d-> end39
+' --- Fila 11: WS, EOF ---
+C10 ----> C11
+C11 -r-> 40 :<color:maroon>[</color> <color:Salmon>WS</color>  <color:Salmon>TAB</color> <color:Salmon>RETURN</color> <color:Salmon>NEWLINE</color> <color:maroon>]</color>
+state 40 <<accept>> : <color:blue>ESPACIO</color>\n<color:blue>skip</COLOR>
+40 -d-> end40
+
+C11 -l-> 41 : <color:Salmon>EOF</color>
+state 41 <<accept>> : <color:blue>EOF</color>
+41 -d-> end41
 @enduml

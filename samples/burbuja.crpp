@@ -1,0 +1,32 @@
+// Implementación iterativa de ordenamiento burbuja en CR++
+
+chunche ni_papa burbuja(fila_india(colones) arr, colones n) {
+    vara colones i = 0;
+    bretee (i < n) {
+        vara colones j = 0;
+        bretee (j < n - i - 1) {
+            mae (arr[j] > arr[j + 1]) {
+                vara colones temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+            j++;
+        }
+        i++;
+    }
+    tomela ni_papa;
+} : ni_papa
+
+chunche ni_papa chante() {
+    vara fila_india(colones) datos = [64, 34, 25, 12, 22];
+
+    burbuja(datos, 5);
+
+    miau("Arreglo ordenado: ");
+    vara colones k = 0;
+    bretee (k < 5) {
+        miau(datos[k]);
+        k++;
+    }
+    tomela ni_papa;
+} : ni_papa
