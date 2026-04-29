@@ -7,7 +7,6 @@ import org.junit.Test
 
 class ParserImplTest {
 
-    // utilidad: escanea y parsea, retorna el parser para inspeccionar errores
     private fun parsear(fuente: String): ParserImpl {
         val tokens = ScannerImpl(fuente).scanAll()
         val parser = ParserImpl(tokens)
@@ -97,7 +96,7 @@ class ParserImplTest {
     }
 
     // =========================================================================
-    // 3. declaraciones de variable y constante
+    // 3. declaraciones
     // =========================================================================
 
     @Test
@@ -141,7 +140,7 @@ class ParserImplTest {
     }
 
     // =========================================================================
-    // 4. sentencia de retorno
+    // 4. sentencias de control
     // =========================================================================
 
     @Test
@@ -161,10 +160,6 @@ class ParserImplTest {
             } : ni_papa
         """.trimIndent())
     }
-
-    // =========================================================================
-    // 5. condicional
-    // =========================================================================
 
     @Test
     fun condicional_sin_sino() {
@@ -193,10 +188,6 @@ class ParserImplTest {
             } : ni_papa
         """.trimIndent())
     }
-
-    // =========================================================================
-    // 6. ciclo
-    // =========================================================================
 
     @Test
     fun ciclo_basico() {
@@ -238,7 +229,7 @@ class ParserImplTest {
     }
 
     // =========================================================================
-    // 7. sentencias de expresion
+    // 5. sentencias de expresion
     // =========================================================================
 
     @Test
@@ -299,7 +290,7 @@ class ParserImplTest {
     }
 
     // =========================================================================
-    // 8. impresion
+    // 6. impresion
     // =========================================================================
 
     @Test
@@ -334,7 +325,145 @@ class ParserImplTest {
     }
 
     // =========================================================================
-    // 9. archivos de muestra completos
+    // 7. expresiones por nivel de precedencia
+    // =========================================================================
+
+    @Test
+    fun expresion_or() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara diay r = diay_si || diay_no;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_and() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara diay r = diay_si && diay_no;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_igualdad() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara diay r = 1 == 1;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_diferente() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara diay r = 1 != 2;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_relacional() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara diay r = 1 < 2;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_aritmetica() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara colones r = 1 + 2 * 3 - 4 / 2;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_agrupada_con_parentesis() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara colones r = (1 + 2) * 3;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_negacion_logica() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara diay r = !diay_si;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_negacion_aritmetica() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara colones r = -5;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_llamada_en_expresion() {
+        sinErrores("""
+            chunche colones doble(colones n) {
+                tomela n;
+            } : colones
+            chunche ni_papa chante() {
+                vara colones r = doble(5) + 1;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_acceso_array_en_expresion() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara fila_india(colones) arr = [1, 2, 3];
+                vara colones r = arr[0] + arr[1];
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_array_literal() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara fila_india(colones) arr = [1, 2, 3];
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun expresion_me_la_comi() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara labia entrada = me_la_comi();
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    // =========================================================================
+    // 8. archivos de muestra completos
     // =========================================================================
 
     @Test
@@ -382,8 +511,38 @@ class ParserImplTest {
         """.trimIndent())
     }
 
+    @Test
+    fun muestra_palindrome() {
+        sinErrores("""
+            chunche diay esPalindromo(fila_india(labia) chars, colones largo) {
+                vara colones izq = 0;
+                vara colones der = largo - 1;
+                vara diay resultado = diay_si;
+                bretee (izq < der) {
+                    mae (chars[izq] != chars[der]) {
+                        resultado = diay_no;
+                        jaleas;
+                    }
+                    izq++;
+                    der--;
+                }
+                tomela resultado;
+            } : diay
+            chunche ni_papa chante() {
+                vara fila_india(labia) palabra = ["a", "n", "i", "l", "i", "n", "a"];
+                vara diay res = esPalindromo(palabra, 7);
+                mae (res == diay_si) {
+                    miau("la palabra es palindromo");
+                } tons {
+                    miau("la palabra NO es palindromo");
+                }
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
     // =========================================================================
-    // 10. errores sintacticos esperados
+    // 9. errores sintacticos esperados
     // =========================================================================
 
     @Test

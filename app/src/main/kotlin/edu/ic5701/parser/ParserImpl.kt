@@ -113,8 +113,12 @@ class ParserImpl(private val tokens: List<Token>) : Parser {
      * termina cuando se llega al EOF.
      */
     private fun parsePrograma() {
+    try {
         parseDeclFunc()
-        parseProgramaPrima()
+    } catch (e: ParseException) {
+        synchronize()
+    }
+    parseProgramaPrima()
     }
 
     /**
@@ -131,7 +135,11 @@ class ParserImpl(private val tokens: List<Token>) : Parser {
                 synchronize()
             }
         }
-        expect(TokenType.EOF)
+        try {
+            expect(TokenType.EOF)
+        } catch (e: ParseException) {
+            // ya se registro el error en reportError, solo evitamos que escape
+        }
     }
 
     // produccion 4: declaracion de funcion
@@ -480,12 +488,223 @@ class ParserImpl(private val tokens: List<Token>) : Parser {
         }
     }
 
-    // esqueleto de expresiones, se completa en el commit 4
+    // producciones 50-96: expresiones
 
+    /**
+     * EXPRESION -> OR_EXPR
+     *
+     * punto de entrada para el parsing de cualquier expresion.
+     * la jerarquia de precedencia se implementa mediante el encadenamiento
+     * de metodos, donde cada nivel llama al nivel de mayor precedencia.
+     */
     private fun parseExpresion() {
-        // se implementa en el commit 4
+        parseOrExpr()
     }
 
+    /**
+     * OR_EXPR -> AND_EXPR OR_EXPR'
+     * OR_EXPR' -> || AND_EXPR OR_EXPR' | epsilon
+     */
+    private fun parseOrExpr() {
+        parseAndExpr()
+        while (check(TokenType.OP_O)) {
+            advance()
+            parseAndExpr()
+        }
+    }
+
+    /**
+     * AND_EXPR -> EQUAL_EXPR AND_EXPR'
+     * AND_EXPR' -> && EQUAL_EXPR AND_EXPR' | epsilon
+     */
+    private fun parseAndExpr() {
+        parseEqualExpr()
+        while (check(TokenType.OP_Y)) {
+            advance()
+            parseEqualExpr()
+        }
+    }
+
+    /**
+     * EQUAL_EXPR -> RELAC_EXPR EQUAL_EXPR'
+     * EQUAL_EXPR' -> == RELAC_EXPR EQUAL_EXPR' | != RELAC_EXPR EQUAL_EXPR' | epsilon
+     */
+    private fun parseEqualExpr() {
+        parseRelacExpr()
+        while (check(TokenType.OP_IGU) || check(TokenType.OP_DIFE)) {
+            advance()
+            parseRelacExpr()
+        }
+    }
+
+    /**
+     * RELAC_EXPR -> ARIT_EXPR RELAC_EXPR'
+     * RELAC_EXPR' -> < ARIT_EXPR | <= ARIT_EXPR | > ARIT_EXPR | >= ARIT_EXPR | epsilon
+     */
+    private fun parseRelacExpr() {
+        parseAritExpr()
+        while (peek().type in setOf(
+            TokenType.OP_MENOR,
+            TokenType.OP_MENOR_IG,
+            TokenType.OP_MAYOR,
+            TokenType.OP_MAYOR_IG
+        )) {
+            advance()
+            parseAritExpr()
+        }
+    }
+
+    /**
+     * ARIT_EXPR -> TERMINO ARIT_EXPR'
+     * ARIT_EXPR' -> + TERMINO ARIT_EXPR' | - TERMINO ARIT_EXPR' | epsilon
+     */
+    private fun parseAritExpr() {
+        parseTermino()
+        while (check(TokenType.OP_SUMA) || check(TokenType.OP_RESTA)) {
+            advance()
+            parseTermino()
+        }
+    }
+
+    /**
+     * TERMINO -> FACTOR TERMINO'
+     * TERMINO' -> * FACTOR TERMINO' | / FACTOR TERMINO' | epsilon
+     */
+    private fun parseTermino() {
+        parseFactor()
+        while (check(TokenType.OP_MUL) || check(TokenType.OP_DIV)) {
+            advance()
+            parseFactor()
+        }
+    }
+
+    /**
+     * FACTOR -> ! FACTOR | - FACTOR | FACTOR_BASE FACTOR'
+     *
+     * los operadores unarios ! y - son prefijos y se aplican recursivamente,
+     * lo que permite expresiones como !!condicion o --n (doble negacion).
+     */
+    private fun parseFactor() {
+        when {
+            check(TokenType.OP_NO) -> {
+                advance()
+                parseFactor()
+            }
+            check(TokenType.OP_RESTA) -> {
+                advance()
+                parseFactor()
+            }
+            else -> {
+                parseFactorBase()
+                parseFactorPrima()
+            }
+        }
+    }
+
+    /**
+     * FACTOR_BASE -> ( EXPRESION )
+     *              | [ LISTA_ELEMENTOS ]
+     *              | IDENT
+     *              | LIT_ENTERO
+     *              | LIT_STRING
+     *              | diay_si
+     *              | diay_no
+     *              | me_la_comi ( )
+     */
+    private fun parseFactorBase() {
+        when (peek().type) {
+            TokenType.PAREN_ABIERTO -> {
+                // expresion agrupada: ( EXPRESION )
+                advance()
+                parseExpresion()
+                expect(TokenType.PAREN_CERRADO)
+            }
+            TokenType.LLAVE_ABIERTA -> {
+                // literal de arreglo: [ LISTA_ELEMENTOS ]
+                advance()
+                parseListaElementos()
+                expect(TokenType.LLAVE_CERRADA)
+            }
+            TokenType.IDENT -> advance()
+            TokenType.LIT_ENTERO -> advance()
+            TokenType.LIT_STRING -> advance()
+            TokenType.VERDADERO -> advance()
+            TokenType.FALSO -> advance()
+            TokenType.VACIO -> advance()
+            TokenType.RECIBIR -> {
+                // lectura de stdin: me_la_comi ( )
+                advance()
+                expect(TokenType.PAREN_ABIERTO)
+                expect(TokenType.PAREN_CERRADO)
+            }
+            else -> throw reportError(
+                "se esperaba una expresion pero se encontro '${peek().lexeme}' " +
+                "(${peek().type.name}) en linea ${peek().line}, columna ${peek().column}"
+            )
+        }
+    }
+
+    /**
+     * FACTOR' -> ++ | -- | ( ARGS ) | [ EXPRESION ] FACTOR_INDEX | epsilon
+     *
+     * los sufijos postfijos se aplican al factor base inmediatamente anterior.
+     * ( ARGS ) representa una llamada a funcion cuando el factor base fue IDENT.
+     * [ EXPRESION ] representa un acceso a elemento de arreglo.
+     */
+    private fun parseFactorPrima() {
+        when (peek().type) {
+            TokenType.OP_INC -> advance()
+            TokenType.OP_DEC -> advance()
+            TokenType.PAREN_ABIERTO -> {
+                // llamada a funcion: f ( ARGS )
+                advance()
+                parseArgs()
+                expect(TokenType.PAREN_CERRADO)
+            }
+            TokenType.LLAVE_ABIERTA -> {
+                // acceso a arreglo: arr [ EXPRESION ] FACTOR_INDEX
+                advance()
+                parseExpresion()
+                expect(TokenType.LLAVE_CERRADA)
+                parseFactorIndex()
+            }
+            else -> {
+                // epsilon: cualquier otro token no pertenece al factor prima
+            }
+        }
+    }
+
+    /**
+     * FACTOR_INDEX -> [ EXPRESION ] FACTOR_INDEX | epsilon
+     *
+     * permite acceso a arreglos multidimensionales encadenados: matriz[i][j]
+     */
+    private fun parseFactorIndex() {
+        if (check(TokenType.LLAVE_ABIERTA)) {
+            advance()
+            parseExpresion()
+            expect(TokenType.LLAVE_CERRADA)
+            parseFactorIndex()
+        }
+        // epsilon: cualquier otro token termina la cadena de indices
+    }
+
+    /**
+     * LISTA_ELEMENTOS -> EXPRESION LISTA_ELEMENTOS' | epsilon
+     * LISTA_ELEMENTOS' -> , EXPRESION LISTA_ELEMENTOS' | epsilon
+     *
+     * lista de elementos para inicializar un arreglo literal: [1, 2, 3]
+     */
+    private fun parseListaElementos() {
+        if (isExpresionToken()) {
+            parseExpresion()
+            while (check(TokenType.SEPARAR)) {
+                advance()
+                parseExpresion()
+            }
+        }
+        // epsilon: ] vacio es un arreglo vacio
+    }
     // utilidades de clasificacion de tokens
 
     /**

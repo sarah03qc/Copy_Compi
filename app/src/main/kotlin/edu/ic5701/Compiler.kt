@@ -1,5 +1,6 @@
 package edu.ic5701
 
+import edu.ic5701.parser.ParserImpl
 import edu.ic5701.scanner.Scanner
 import edu.ic5701.scanner.ScannerImpl
 import edu.ic5701.tokens.TokenType
@@ -7,20 +8,21 @@ import java.io.File
 import kotlin.system.exitProcess
 
 /**
- * Punto de entrada del compilador CR++.
+ * punto de entrada del compilador CR++.
  *
- * Uso:
+ * uso:
  *   ./compiler <ruta_al_archivo.crpp>
  *
- * El programa imprime en stdout la lista de tokens reconocidos.
- * Los errores léxicos se reportan en stderr con el formato:
- *   Jaguarsh (línea N, columna M): <descripción>
+ * el programa imprime en stdout la lista de tokens reconocidos y el resultado
+ * del analisis sintactico. los errores lexicos y sintacticos se reportan en
+ * stderr con el formato:
+ *   Jaguarsh (linea N, columna M): descripcion
  */
 object Compiler {
     @JvmStatic
     fun main(args: Array<String>) {
         if (args.isEmpty()) {
-            System.err.println("Uso: compiler <archivo.crpp>")
+            System.err.println("uso: compiler <archivo.crpp>")
             exitProcess(1)
         }
 
@@ -28,29 +30,28 @@ object Compiler {
         val file = File(path)
 
         if (!file.exists()) {
-            System.err.println("Jaguarsh: no se encontró el archivo '$path'")
+            System.err.println("Jaguarsh: no se encontro el archivo '$path'")
             exitProcess(1)
         }
 
         if (!file.name.endsWith(".crpp")) {
-            System.err.println("Advertencia: el archivo '$path' no tiene extensión .crpp")
+            System.err.println("advertencia: el archivo '$path' no tiene extension .crpp")
         }
 
         val source = file.readText(Charsets.UTF_8)
+
+        // analisis lexico
         val scanner: Scanner = ScannerImpl(source)
         val tokens = scanner.scanAll()
 
-        // ----------------------------------------------------------------
-        // Imprimir tokens reconocidos (excluyendo EOF si no hay errores)
-        // ----------------------------------------------------------------
         println("=".repeat(60))
-        println("  Tokens reconocidos — ${file.name}")
+        println("  tokens reconocidos: ${file.name}")
         println("=".repeat(60))
 
         val nonEof = tokens.filter { it.type != TokenType.EOF }
-        val colW = 22  // ancho de la columna de tipo
+        val colW = 22
 
-        println("%-${colW}s  %-6s  %-6s  %s".format("TIPO", "LÍNEA", "COL", "LEXEMA"))
+        println("%-${colW}s  %-6s  %-6s  %s".format("tipo", "linea", "col", "lexema"))
         println("-".repeat(60))
 
         for (tok in nonEof) {
@@ -65,16 +66,42 @@ object Compiler {
         }
 
         println("-".repeat(60))
-        println("Total: ${nonEof.size} token(s)")
+        println("total: ${nonEof.size} token(s)")
 
-        // ----------------------------------------------------------------
-        // Resumen de errores
-        // ----------------------------------------------------------------
-        if (scanner.errors.isEmpty()) {
-            println("\n✓ Análisis léxico completado sin errores.")
-        } else {
-            println("\n✗ Se encontraron ${scanner.errors.size} error(es) léxico(s).")
-            System.exit(2)
+        val hayErroresLexicos = scanner.errors.isNotEmpty()
+
+        // analisis sintactico
+        println("\n" + "=".repeat(60))
+        println("  analisis sintactico: ${file.name}")
+        println("=".repeat(60))
+
+        val parser = ParserImpl(tokens)
+        val esValido = parser.parse()
+
+        val hayErroresSintacticos = parser.errors.isNotEmpty()
+
+        // resumen final
+        println("\n" + "=".repeat(60))
+        println("  resumen")
+        println("=".repeat(60))
+
+        when {
+            hayErroresLexicos && hayErroresSintacticos -> {
+                println("se encontraron errores lexicos y sintacticos.")
+                exitProcess(2)
+            }
+            hayErroresLexicos -> {
+                println("se encontraron ${scanner.errors.size} error(es) lexico(s).")
+                exitProcess(2)
+            }
+            hayErroresSintacticos -> {
+                println("se encontraron ${parser.errors.size} error(es) sintactico(s).")
+                exitProcess(2)
+            }
+            else -> {
+                println("el archivo '${file.name}' es sintacticamente valido.")
+                exitProcess(0)
+            }
         }
     }
 }
