@@ -584,4 +584,26 @@ class ParserImplTest {
             } : ni_papa
         """.trimIndent())
     }
+
+    @Test
+    fun incremento_prefijo_como_sentencia() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara colones i = 0;
+                ++i;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
+
+    @Test
+    fun decremento_prefijo_como_sentencia() {
+        sinErrores("""
+            chunche ni_papa chante() {
+                vara colones i = 0;
+                --i;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+    }
 }

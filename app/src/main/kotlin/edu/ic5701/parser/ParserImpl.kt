@@ -180,11 +180,31 @@ class ParserImpl(tokens: List<Token>) : Parser {
             TokenType.BREAK -> parseSentBreak()
             TokenType.CONTINUE -> parseSentContinue()
             TokenType.IDENT -> parseSentExpr()
+            TokenType.OP_INC -> parseSentPrefijoInc()
+            TokenType.OP_DEC -> parseSentPrefijoDec()
             else -> throw reportError(
                 "token inesperado '${peek().lexeme}' al inicio de sentencia " +
                 "en linea ${peek().line}, columna ${peek().column}"
             )
         }
+    }
+
+    /**
+    * sentencia de incremento prefijo: ++ IDENT ;
+    */
+    private fun parseSentPrefijoInc() {
+        expect(TokenType.OP_INC)
+        expect(TokenType.IDENT)
+        expect(TokenType.FIN_SENTENCIA)
+    }
+
+    /**
+    * sentencia de decremento prefijo: -- IDENT ;
+    */
+    private fun parseSentPrefijoDec() {
+        expect(TokenType.OP_DEC)
+        expect(TokenType.IDENT)
+        expect(TokenType.FIN_SENTENCIA)
     }
 
     // -----------------------------------------------------------
@@ -507,7 +527,9 @@ class ParserImpl(tokens: List<Token>) : Parser {
         TokenType.IMPRIMIR,
         TokenType.BREAK,
         TokenType.CONTINUE,
-        TokenType.IDENT
+        TokenType.IDENT,
+        TokenType.OP_INC,
+        TokenType.OP_DEC
     )
 
     private fun isExpresionToken(): Boolean = stream.checkAny(

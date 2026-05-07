@@ -1,0 +1,21 @@
+chunche ni_papa chante() {
+    vara colones i = 0;
+    vara colones j = 10;
+
+    ++i;
+    --j;
+
+    miau(i);
+    miau(j);
+
+    bretee (i < j) {
+        ++i;
+        --j;
+        j++;
+    }
+
+    miau(i);
+    miau(j);
+
+    tomela ni_papa;
+} : ni_papa
