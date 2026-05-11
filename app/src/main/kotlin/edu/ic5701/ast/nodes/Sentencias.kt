@@ -67,7 +67,7 @@ data class Imprimir(
 data class Leer(
     override val inicio: Int,
     override val fin: Int
-) : Sentencia {}
+) : Sentencia, Expresion {}
 
 /** <nombre> = <valor> */
 data class AsignacionSimple(

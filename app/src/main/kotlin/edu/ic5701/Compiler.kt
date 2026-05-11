@@ -6,6 +6,8 @@ import edu.ic5701.scanner.TableDrivenScanner
 import edu.ic5701.tokens.TokenType
 import java.io.File
 import kotlin.system.exitProcess
+import edu.ic5701.ast.ASTPrinter
+import edu.ic5701.ast.accept
 
 /**
  * punto de entrada del compilador CR++.
@@ -76,11 +78,10 @@ object Compiler {
         println("=".repeat(60))
 
         val parser = RecursiveDescentParser(tokens)
-        val esValido = parser.parse()
+        val programa = parser.parse()
 
         val hayErroresSintacticos = parser.errors.isNotEmpty()
 
-        // resumen final
         println("\n" + "=".repeat(60))
         println("  resumen")
         println("=".repeat(60))
@@ -100,6 +101,7 @@ object Compiler {
             }
             else -> {
                 println("el archivo '${file.name}' es sintacticamente valido.")
+                programa?.accept(ASTPrinter())
                 exitProcess(0)
             }
         }

@@ -33,6 +33,8 @@ internal class TokenStream(private val tokens: List<Token>) {
      */
     fun isAtEnd(): Boolean = check(TokenType.EOF)
 
+    fun currentIndex(): Int = current
+
     /**
      * consume el token actual, avanza al siguiente y retorna el token consumido.
      */
