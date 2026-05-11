@@ -15,7 +15,7 @@ import edu.ic5701.tokens.TokenType
  * a TokenStream y ErrorReporter respectivamente, manteniendo este archivo
  * enfocado exclusivamente en la logica de parsing.
  */
-class ParserImpl(tokens: List<Token>) : Parser {
+class RecursiveDescentParser(tokens: List<Token>) : Parser {
 
     private val stream = TokenStream(tokens)
     private val reporter = ErrorReporter(stream)

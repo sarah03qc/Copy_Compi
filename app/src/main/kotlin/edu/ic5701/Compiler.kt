@@ -1,8 +1,8 @@
 package edu.ic5701
 
-import edu.ic5701.parser.ParserImpl
+import edu.ic5701.parser.RecursiveDescentParser
 import edu.ic5701.scanner.Scanner
-import edu.ic5701.scanner.ScannerImpl
+import edu.ic5701.scanner.TableDrivenScanner
 import edu.ic5701.tokens.TokenType
 import java.io.File
 import kotlin.system.exitProcess
@@ -41,7 +41,7 @@ object Compiler {
         val source = file.readText(Charsets.UTF_8)
 
         // analisis lexico
-        val scanner: Scanner = ScannerImpl(source)
+        val scanner: Scanner = TableDrivenScanner(source)
         val tokens = scanner.scanAll()
 
         println("=".repeat(60))
@@ -75,7 +75,7 @@ object Compiler {
         println("  analisis sintactico: ${file.name}")
         println("=".repeat(60))
 
-        val parser = ParserImpl(tokens)
+        val parser = RecursiveDescentParser(tokens)
         val esValido = parser.parse()
 
         val hayErroresSintacticos = parser.errors.isNotEmpty()

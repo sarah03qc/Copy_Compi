@@ -1,15 +1,15 @@
 package edu.ic5701
 
-import edu.ic5701.parser.ParserImpl
-import edu.ic5701.scanner.ScannerImpl
+import edu.ic5701.parser.RecursiveDescentParser
+import edu.ic5701.scanner.TableDrivenScanner
 import org.junit.Assert
 import org.junit.Test
 
 class ParserImplTest {
 
-    private fun parsear(fuente: String): ParserImpl {
-        val tokens = ScannerImpl(fuente).scanAll()
-        val parser = ParserImpl(tokens)
+    private fun parsear(fuente: String): RecursiveDescentParser {
+        val tokens = TableDrivenScanner(fuente).scanAll()
+        val parser = RecursiveDescentParser(tokens)
         parser.parse()
         return parser
     }

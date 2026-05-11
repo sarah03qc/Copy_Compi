@@ -5,9 +5,9 @@ package edu.ic5701.ast.nodes
  *
  * Nomenclatura costarricense:
  *   - Colones  → entero  (int)
- *   - Diay     → flotante (float)
+ *   - Diay     → booleano (bool)
  *   - Labia    → cadena  (string)
- *   - NiPapa   → booleano (bool)
+ *   - NiPapa   → vacio (void)
  *   - Array    → arreglo de cualquier tipo
  */
 sealed interface TipoDato : ASTNode
