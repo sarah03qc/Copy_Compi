@@ -1,11 +1,13 @@
 package edu.ic5701
 
-import edu.ic5701.parser.ParserImpl
+import edu.ic5701.parser.RecursiveDescentParser
 import edu.ic5701.scanner.Scanner
-import edu.ic5701.scanner.ScannerImpl
+import edu.ic5701.scanner.TableDrivenScanner
 import edu.ic5701.tokens.TokenType
 import java.io.File
 import kotlin.system.exitProcess
+import edu.ic5701.ast.ASTPrinter
+import edu.ic5701.ast.accept
 
 /**
  * punto de entrada del compilador CR++.
@@ -41,7 +43,7 @@ object Compiler {
         val source = file.readText(Charsets.UTF_8)
 
         // analisis lexico
-        val scanner: Scanner = ScannerImpl(source)
+        val scanner: Scanner = TableDrivenScanner(source)
         val tokens = scanner.scanAll()
 
         println("=".repeat(60))
@@ -75,12 +77,11 @@ object Compiler {
         println("  analisis sintactico: ${file.name}")
         println("=".repeat(60))
 
-        val parser = ParserImpl(tokens)
-        val esValido = parser.parse()
+        val parser = RecursiveDescentParser(tokens)
+        val programa = parser.parse()
 
         val hayErroresSintacticos = parser.errors.isNotEmpty()
 
-        // resumen final
         println("\n" + "=".repeat(60))
         println("  resumen")
         println("=".repeat(60))
@@ -100,6 +101,7 @@ object Compiler {
             }
             else -> {
                 println("el archivo '${file.name}' es sintacticamente valido.")
+                programa?.accept(ASTPrinter())
                 exitProcess(0)
             }
         }

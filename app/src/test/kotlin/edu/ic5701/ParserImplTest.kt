@@ -1,15 +1,16 @@
 package edu.ic5701
 
-import edu.ic5701.parser.ParserImpl
-import edu.ic5701.scanner.ScannerImpl
+import edu.ic5701.parser.RecursiveDescentParser
+import edu.ic5701.scanner.TableDrivenScanner
 import org.junit.Assert
 import org.junit.Test
+import edu.ic5701.ast.nodes.*
 
 class ParserImplTest {
 
-    private fun parsear(fuente: String): ParserImpl {
-        val tokens = ScannerImpl(fuente).scanAll()
-        val parser = ParserImpl(tokens)
+    private fun parsear(fuente: String): RecursiveDescentParser {
+        val tokens = TableDrivenScanner(fuente).scanAll()
+        val parser = RecursiveDescentParser(tokens)
         parser.parse()
         return parser
     }
@@ -605,5 +606,199 @@ class ParserImplTest {
                 tomela ni_papa;
             } : ni_papa
         """.trimIndent())
+    }
+
+    // =========================================================================
+    // 10. verificacion de nodos AST construidos
+    // =========================================================================
+
+    private fun ast(fuente: String): Programa? {
+        val tokens = TableDrivenScanner(fuente).scanAll()
+        val parser = RecursiveDescentParser(tokens)
+        return parser.parse()
+    }
+
+    @Test
+    fun ast_funcion_simple_construye_programa() {
+        val prog = ast("""
+            chunche ni_papa chante() {
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        Assert.assertNotNull(prog)
+        Assert.assertEquals(1, prog!!.cuerpo.size)
+        Assert.assertTrue(prog.cuerpo[0] is FuncionDecl)
+    }
+
+    @Test
+    fun ast_funcion_chante_es_entrada() {
+        val prog = ast("""
+            chunche ni_papa chante() {
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val funcion = prog!!.cuerpo[0] as FuncionDecl
+        Assert.assertTrue(funcion.esEntrada)
+        Assert.assertEquals("chante", funcion.nombre.nombre)
+    }
+
+    @Test
+    fun ast_funcion_no_entrada() {
+        val prog = ast("""
+            chunche colones suma(colones a) {
+                tomela a;
+            } : colones
+            chunche ni_papa chante() {
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val suma = prog!!.cuerpo[0] as FuncionDecl
+        Assert.assertFalse(suma.esEntrada)
+    }
+
+    @Test
+    fun ast_parametros_construidos_correctamente() {
+        val prog = ast("""
+            chunche colones doble(colones n) {
+                tomela n;
+            } : colones
+            chunche ni_papa chante() {
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val funcion = prog!!.cuerpo[0] as FuncionDecl
+        Assert.assertEquals(1, funcion.params.size)
+        Assert.assertEquals("n", funcion.params[0].nombre.nombre)
+        Assert.assertTrue(funcion.params[0].tipoDato is TipoColones)
+    }
+
+    @Test
+    fun ast_retorno_construye_nodo_correcto() {
+        val prog = ast("""
+            chunche colones uno() {
+                tomela 1;
+            } : colones
+            chunche ni_papa chante() {
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val bloque = (prog!!.cuerpo[0] as FuncionDecl).cuerpo
+        val retorno = bloque.sentencias[0] as Retorno
+        Assert.assertTrue(retorno.valor is LiteralEntero)
+        Assert.assertEquals(1, (retorno.valor as LiteralEntero).valor)
+    }
+
+    @Test
+    fun ast_variable_decl_construye_nodo_correcto() {
+        val prog = ast("""
+            chunche ni_papa chante() {
+                vara colones x = 5;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val bloque = (prog!!.cuerpo[0] as FuncionDecl).cuerpo
+        val decl = bloque.sentencias[0] as VariableDecl
+        Assert.assertEquals("x", decl.nombre.nombre)
+        Assert.assertTrue(decl.tipoDato is TipoColones)
+        Assert.assertEquals(5, (decl.valor as LiteralEntero).valor)
+    }
+
+    @Test
+    fun ast_condicional_con_sino_construye_ambos_bloques() {
+        val prog = ast("""
+            chunche ni_papa chante() {
+                vara colones x = 0;
+                mae (x == 0) {
+                    tomela ni_papa;
+                } tons {
+                    tomela ni_papa;
+                }
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val bloque = (prog!!.cuerpo[0] as FuncionDecl).cuerpo
+        val cond = bloque.sentencias[1] as Condicional
+        Assert.assertNotNull(cond.elseBody)
+        Assert.assertTrue(cond.condicion is OperacionIgu)
+    }
+
+    @Test
+    fun ast_condicional_sin_sino_tiene_else_nulo() {
+        val prog = ast("""
+            chunche ni_papa chante() {
+                vara colones x = 0;
+                mae (x == 0) {
+                    tomela ni_papa;
+                }
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val bloque = (prog!!.cuerpo[0] as FuncionDecl).cuerpo
+        val cond = bloque.sentencias[1] as Condicional
+        Assert.assertNull(cond.elseBody)
+    }
+
+    @Test
+    fun ast_operacion_suma_construye_nodo_correcto() {
+        val prog = ast("""
+            chunche ni_papa chante() {
+                vara colones r = 1 + 2;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val bloque = (prog!!.cuerpo[0] as FuncionDecl).cuerpo
+        val decl = bloque.sentencias[0] as VariableDecl
+        Assert.assertTrue(decl.valor is OperacionSuma)
+        val suma = decl.valor as OperacionSuma
+        Assert.assertEquals(1, (suma.izq as LiteralEntero).valor)
+        Assert.assertEquals(2, (suma.der as LiteralEntero).valor)
+    }
+
+    @Test
+    fun ast_llamada_funcion_construye_nodo_correcto() {
+        val prog = ast("""
+            chunche colones doble(colones n) {
+                tomela n;
+            } : colones
+            chunche ni_papa chante() {
+                vara colones r = doble(5);
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val bloque = (prog!!.cuerpo[1] as FuncionDecl).cuerpo
+        val decl = bloque.sentencias[0] as VariableDecl
+        Assert.assertTrue(decl.valor is LlamadaFuncion)
+        val llamada = decl.valor as LlamadaFuncion
+        Assert.assertEquals("doble", llamada.nombre.nombre)
+        Assert.assertEquals(1, llamada.args.size)
+    }
+
+    @Test
+    fun ast_asignacion_simple_construye_nodo_correcto() {
+        val prog = ast("""
+            chunche ni_papa chante() {
+                vara colones x = 0;
+                x = 5;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val bloque = (prog!!.cuerpo[0] as FuncionDecl).cuerpo
+        val asig = bloque.sentencias[1] as AsignacionSimple
+        Assert.assertEquals("x", asig.nombre.nombre)
+        Assert.assertEquals(5, (asig.valor as LiteralEntero).valor)
+    }
+
+    @Test
+    fun ast_literal_booleano_construye_nodo_correcto() {
+        val prog = ast("""
+            chunche ni_papa chante() {
+                vara diay b = diay_si;
+                tomela ni_papa;
+            } : ni_papa
+        """.trimIndent())
+        val bloque = (prog!!.cuerpo[0] as FuncionDecl).cuerpo
+        val decl = bloque.sentencias[0] as VariableDecl
+        Assert.assertTrue(decl.valor is LiteralBooleano)
+        Assert.assertTrue((decl.valor as LiteralBooleano).valor)
     }
 }

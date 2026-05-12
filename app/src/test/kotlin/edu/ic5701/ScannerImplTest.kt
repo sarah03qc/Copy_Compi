@@ -1,6 +1,6 @@
 package edu.ic5701
 
-import edu.ic5701.scanner.ScannerImpl
+import edu.ic5701.scanner.TableDrivenScanner
 import edu.ic5701.tokens.Token
 import edu.ic5701.tokens.TokenType
 import org.junit.Assert
@@ -12,12 +12,12 @@ class ScannerImplTest {
     // Utilidad: escanea y retorna solo los tipos de token (sin EOF)
     // -------------------------------------------------------------------------
     private fun tipos(source: String): List<TokenType> {
-        val scanner = ScannerImpl(source)
+        val scanner = TableDrivenScanner(source)
         return scanner.scanAll().map { it.type }.dropLast(1)
     }
 
     private fun tokens(source: String): List<Token> {
-        val scanner = ScannerImpl(source)
+        val scanner = TableDrivenScanner(source)
         return scanner.scanAll().dropLast(1) // quita EOF
     }
 
@@ -161,7 +161,7 @@ class ScannerImplTest {
 
     @Test
     fun lit_string_sin_cerrar() {
-        val scanner = ScannerImpl("\"cadena sin cierre")
+        val scanner = TableDrivenScanner("\"cadena sin cierre")
         scanner.scanAll()
         Assert.assertTrue("Debe reportar error léxico", scanner.errors.isNotEmpty())
     }
@@ -253,14 +253,14 @@ class ScannerImplTest {
 
     @Test
     fun and_incompleto_es_error() {
-        val scanner = ScannerImpl("&")
+        val scanner = TableDrivenScanner("&")
         scanner.scanAll()
         Assert.assertTrue("& solo debe reportar error léxico", scanner.errors.isNotEmpty())
     }
 
     @Test
     fun or_incompleto_es_error() {
-        val scanner = ScannerImpl("|")
+        val scanner = TableDrivenScanner("|")
         scanner.scanAll()
         Assert.assertTrue("| solo debe reportar error léxico", scanner.errors.isNotEmpty())
     }
@@ -351,19 +351,19 @@ class ScannerImplTest {
 
     @Test
     fun entrada_vacia_produce_EOF() {
-        val toks = ScannerImpl("").scanAll()
+        val toks = TableDrivenScanner("").scanAll()
         Assert.assertEquals(1, toks.size)
         Assert.assertEquals(TokenType.EOF, toks[0].type)
     }
 
     @Test
     fun eof_es_ultimo() {
-        val toks = ScannerImpl("vara colones x = 1;").scanAll()
+        val toks = TableDrivenScanner("vara colones x = 1;").scanAll()
         Assert.assertEquals(TokenType.EOF, toks.last().type)
     }
     @Test
     fun archivo_vacio() {
-        val toks = ScannerImpl("").scanAll()
+        val toks = TableDrivenScanner("").scanAll()
         Assert.assertEquals(TokenType.EOF, toks.last().type)
     }
     // =========================================================================
@@ -372,7 +372,7 @@ class ScannerImplTest {
 
     @Test
     fun caracter_no_reconocido() {
-        val scanner = ScannerImpl("@")
+        val scanner = TableDrivenScanner("@")
         val toks = scanner.scanAll()
         Assert.assertTrue(toks.any { it.type == TokenType.ERROR })
         Assert.assertTrue(scanner.errors.isNotEmpty())
@@ -380,7 +380,7 @@ class ScannerImplTest {
 
     @Test
     fun error_contiene_linea() {
-        val scanner = ScannerImpl("@")
+        val scanner = TableDrivenScanner("@")
         scanner.scanAll()
         Assert.assertTrue(scanner.errors[0].contains("línea 1"))
     }
@@ -401,7 +401,7 @@ class ScannerImplTest {
             }
         """.trimIndent()
 
-        val scanner = ScannerImpl(fuente)
+        val scanner = TableDrivenScanner(fuente)
         val toks = scanner.scanAll()
 
         Assert.assertTrue("No debe haber errores léxicos", scanner.errors.isEmpty())
@@ -467,14 +467,14 @@ class ScannerImplTest {
             }
         """.trimIndent()
 
-        val scanner = ScannerImpl(fuente)
+        val scanner = TableDrivenScanner(fuente)
         scanner.scanAll()
         Assert.assertTrue("No debe haber errores léxicos en burbuja", scanner.errors.isEmpty())
     }
 
     @Test
     fun declaracion_constante() {
-        val scanner = ScannerImpl("de_fijo colones MAX = 10;")
+        val scanner = TableDrivenScanner("de_fijo colones MAX = 10;")
         val toks = scanner.scanAll()
 
         Assert.assertTrue(scanner.errors.isEmpty())
@@ -495,14 +495,14 @@ class ScannerImplTest {
     @Test
     fun arreglo_bidimensional() {
         val fuente = "vara fila_india(fila_india(colones)) matriz = [[1, 2], [3, 4]];"
-        val scanner = ScannerImpl(fuente)
+        val scanner = TableDrivenScanner(fuente)
         scanner.scanAll()
         Assert.assertTrue("No debe haber errores léxicos en arreglo 2D", scanner.errors.isEmpty())
     }
 
     @Test
     fun sent_miau_multiples_args() {
-        val scanner = ScannerImpl("miau(\"Resultado: \", resultado);")
+        val scanner = TableDrivenScanner("miau(\"Resultado: \", resultado);")
         val toks = scanner.scanAll()
         Assert.assertTrue(scanner.errors.isEmpty())
         Assert.assertEquals(TokenType.IMPRIMIR, toks[0].type)
@@ -510,7 +510,7 @@ class ScannerImplTest {
 
     @Test
     fun sent_me_la_comi() {
-        val scanner = ScannerImpl("vara labia entrada = me_la_comi();")
+        val scanner = TableDrivenScanner("vara labia entrada = me_la_comi();")
         val toks = scanner.scanAll()
         Assert.assertTrue(scanner.errors.isEmpty())
         Assert.assertTrue(toks.any { it.type == TokenType.RECIBIR })

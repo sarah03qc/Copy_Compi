@@ -13,7 +13,7 @@ import edu.ic5701.tokens.TokenType
  * El scanner omite espacios en blanco, tabs, retornos de línea y saltos de línea.
  * En caso de carácter inesperado emite un token ERROR y reporta el error léxico.
  */
-class ScannerImpl (private val source: String) : Scanner {
+class TableDrivenScanner(private val source: String) : Scanner {
     /** Lista de errores léxicos encontrados. */
     override val errors: MutableList<String> = mutableListOf()
 
